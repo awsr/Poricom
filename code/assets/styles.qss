@@ -356,3 +356,9 @@ QScrollBar::add-page:horizontal,
 QScrollBar::sub-page:horizontal {
   background: none;
 }
+
+/* Scratchpad */
+QTextEdit#scratchpad {
+  font-family: 'Yu Gothic';
+  font-size: 20pt;
+}

@@ -31,6 +31,7 @@ from utils.config import config, saveOnClose
 from Workers import BaseWorker
 from Ribbon import (Ribbon)
 from Explorers import (ImageExplorer)
+from Scratchpad import (Scratchpad)
 from Views import (OCRCanvas, FullScreen)
 from Popups import (FontPicker, LanguagePicker, ScaleImagePicker,
                     ShortcutPicker, PickerPopup, MessagePopup)
@@ -58,10 +59,17 @@ class MainWindow(QMainWindow):
         self.vLayout.addWidget(self.ribbon)
         self.canvas = OCRCanvas(self, self.tracker)
         self.explorer = ImageExplorer(self, self.tracker)
+        self.scratchpad = Scratchpad(self)
+
+        _sideWidget = QWidget()
+        sideLayout = QVBoxLayout(_sideWidget)
+        sideLayout.addWidget(self.explorer)
+        sideLayout.addWidget(self.scratchpad)
+        sideLayout.setContentsMargins(0, 0, 0, 0)
 
         _viewWidget = QWidget()
         hLayout = QHBoxLayout(_viewWidget)
-        hLayout.addWidget(self.explorer, config["NAV_VIEW_RATIO"][0])
+        hLayout.addWidget(_sideWidget, config["NAV_VIEW_RATIO"][0])
         hLayout.addWidget(self.canvas, config["NAV_VIEW_RATIO"][1])
         hLayout.setContentsMargins(0, 0, 0, 0)
 
