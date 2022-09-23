@@ -144,3 +144,8 @@ cython_debug/
 
 # Documentation
 *.mp4
+
+# Visual Studio
+.vs/
+*.pyproj
+*.sln
