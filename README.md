@@ -74,6 +74,9 @@ Download the latest zip file [here](https://github.com/bluaxees/Poricom/releases
 
 For developers, clone this repo and install requirements: `pip install -r requirements.txt`. Run the app in the command line using `python main.py`. 
 
+#### For Developers on Windows
+*Before installing the requirements*, you will first need to download a [pre-compiled build of tesserocr](https://github.com/simonflueckiger/tesserocr-windows_build/releases) and install it: `pip install tesserocr-2.5.2-cp310-cp310-win_amd64.whl` <sub>(example for Python 3.10)</sub>
+
 ### System Requirements
 
 Recommended:
