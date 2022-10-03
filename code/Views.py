@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from time import sleep
+import math
 
 from PyQt5.QtCore import (Qt, QRectF, QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtCore import (Qt, QRect, QSize, QRectF,
@@ -133,8 +134,8 @@ class OCRCanvas(BaseCanvas):
     def viewImage(self, factor=1):
         # self.verticalScrollBar().setSliderPosition(0)
         factor = self.currentScale
-        w = factor*self.viewport().geometry().width()
-        h = factor*self.viewport().geometry().height()
+        w = math.floor(factor*self.viewport().geometry().width())
+        h = math.floor(factor*self.viewport().geometry().height())
         if self._viewImageMode == 0:
             self.pixmap.setPixmap(
                 self.tracker.pixImage.scaledToWidth(w, Qt.SmoothTransformation))
