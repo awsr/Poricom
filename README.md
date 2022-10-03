@@ -75,7 +75,7 @@ Download the latest zip file [here](https://github.com/bluaxees/Poricom/releases
 For developers, clone this repo and install requirements: `pip install -r requirements.txt`. Run the app in the command line using `python main.py`. 
 
 #### For Developers on Windows
-*Before installing the requirements*, you will first need to download a [pre-compiled build of tesserocr](https://github.com/simonflueckiger/tesserocr-windows_build/releases) and install it: `pip install tesserocr-2.5.2-cp310-cp310-win_amd64.whl` <sub>(example for Python 3.10)</sub>
+*Before installing the requirements*, you must download a [pre-compiled build of tesserocr](https://github.com/simonflueckiger/tesserocr-windows_build/releases) and install it: `pip install <package_name>.whl`
 
 ### System Requirements
 
@@ -85,7 +85,7 @@ Recommended:
 
 Approximately 250 MB of free space and 200 MB of memory is needed to run the application using the Tesseract API. If using the Manga OCR model, an additional 450 MB of free space and 800 MB of memory is required.
 
-For developers, the following Python versions are supported: 3.7, 3.8, and 3.9.
+For developers, the following Python versions are supported: 3.7, 3.8, 3.9, and 3.10.
 
 ## Acknowledgements <a name = "acknowledgements"></a>
 This project will not be possible without the MangaOcr model by [Maciej Budyś](https://github.com/kha-white) and the Tesseract python wrapper by [sirfz](https://github.com/sirfz) and [the tesserocr contributors](https://github.com/sirfz/tesserocr/graphs/contributors). 
