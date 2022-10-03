@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from os.path import exists
+import math
 
 from PyQt5.QtGui import (QIcon)
 from PyQt5.QtCore import (Qt, QSize)
@@ -52,11 +53,11 @@ class RibbonTab(QWidget):
 
     def loadButtonConfig(self, buttonName, buttonConfig):
 
-        w = self.parent.frameGeometry().height(
-        )*config["TBAR_ISIZE_REL"]*buttonConfig["iconW"]
-        h = self.parent.frameGeometry().height(
-        )*config["TBAR_ISIZE_REL"]*buttonConfig["iconH"]
-        m = config["TBAR_ISIZE_MARGIN"]
+        w = math.floor(self.parent.frameGeometry().height(
+        )*config["TBAR_ISIZE_REL"]*buttonConfig["iconW"])
+        h = math.floor(self.parent.frameGeometry().height(
+        )*config["TBAR_ISIZE_REL"]*buttonConfig["iconH"])
+        m = math.floor(config["TBAR_ISIZE_MARGIN"])
 
         icon = QIcon()
         path = config["TBAR_ICONS"] + buttonConfig["path"]
@@ -111,8 +112,8 @@ class Ribbon(QTabWidget):
         self.parent = parent
         self.tracker = tracker
 
-        h = self.parent.frameGeometry().height(
-        ) * config["TBAR_ISIZE_REL"] * config["RBN_HEIGHT"]
+        h = math.floor(self.parent.frameGeometry().height(
+        ) * config["TBAR_ISIZE_REL"] * config["RBN_HEIGHT"])
         self.setFixedHeight(h)
 
         for tabName, tools in config["TBAR_FUNCS"].items():
