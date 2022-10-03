@@ -5,7 +5,8 @@
 </p>
 <h2 align="center">Poricom</h2>
 
-<p align="center"> Optical character recognition in manga images. Manga OCR desktop application</p>
+<p align="center">Optical character recognition in manga images. Manga OCR desktop application.</p>
+<p align="center">This fork adds a scratchpad for text and fixes Python 3.10 support.</p>
 
 ## Contents
 - [About](#about)
