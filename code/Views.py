@@ -252,8 +252,10 @@ class OCRCanvas(BaseCanvas):
             QGraphicsView.wheelEvent(self, event)
 
     def mouseMoveEvent(self, event):
-        pressedKey = QApplication.keyboardModifiers()
-        panMode = pressedKey == Qt.ControlModifier or self._zoomPanMode
+        withCtrlKey = QApplication.keyboardModifiers() == Qt.ControlModifier
+        withMiddleMouseButton = QApplication.mouseButtons() == Qt.MiddleButton
+
+        panMode = withCtrlKey or self._zoomPanMode or withMiddleMouseButton
 
         if panMode:
             self.setDragMode(QGraphicsView.ScrollHandDrag)
