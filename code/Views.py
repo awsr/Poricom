@@ -67,6 +67,7 @@ class BaseCanvas(QGraphicsView):
         logText(text, mode=logToFile, path=logPath)
         self.canvasText.hide()
         if (self.tracker.scratchpadAutofocus):
+            QWidget.activateWindow(self.tracker.scratchpad)
             QWidget.setFocus(self.tracker.scratchpad)
         super().mouseReleaseEvent(event)
 
