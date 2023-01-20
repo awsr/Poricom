@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         self.vLayout.addWidget(self.ribbon)
         self.canvas = OCRCanvas(self, self.tracker)
         self.explorer = ImageExplorer(self, self.tracker)
-        self.scratchpad = Scratchpad(self)
+        self.scratchpad = Scratchpad(self, self.tracker)
 
         self.dockExp = DockBase(self, self.explorer)
         self.dockExp.setWindowTitle("Files")
@@ -303,6 +303,9 @@ class MainWindow(QMainWindow):
 
     def toggleLogging(self):
         self.tracker.switchWriteMode()
+
+    def toggleScratchpadAutofocus(self):
+        self.tracker.switchScratchpadAutofocus()
 
 # --------------------------- Always On Functions ---------------------------- #
 
