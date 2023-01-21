@@ -49,6 +49,7 @@ if __name__ == '__main__':
     eventDispatcher.installNativeEventFilter(winEventFilter)
 
     widget.showMaximized()
+    widget.initButtonState()
     widget.loadModel()
     app.exec_()
 

@@ -307,6 +307,12 @@ class MainWindow(QMainWindow):
     def toggleScratchpadAutofocus(self):
         self.tracker.switchScratchpadAutofocus()
 
+# ----------------------- Button State Initialization ------------------------ #
+
+    def initButtonState(self):
+        scratchpadButton = self.ribbon.findChild(QPushButton, "toggleScratchpadAutofocus")
+        scratchpadButton.setChecked(not self.tracker.scratchpadAutofocus)
+
 # --------------------------- Always On Functions ---------------------------- #
 
     def loadPrevImage(self):
