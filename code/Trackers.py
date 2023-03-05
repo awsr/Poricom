@@ -46,6 +46,11 @@ class Tracker:
         self._betterOCR = False
         self._ocrModel = None
 
+        self._scratchpad = None
+        self._scratchpadAutofocus = False
+        if config ["SCRATCHPAD_AUTOFOCUS_MODE"]:
+            self._scratchpadAutofocus = True
+
     def twoFileToImage(self, fileLeft, fileRight):
         imageLeft, imageRight = PImage(fileLeft), PImage(fileRight)
         if not (imageLeft.isValid()):
@@ -142,6 +147,15 @@ class Tracker:
     def writeMode(self, writeMode):
         self._writeMode = writeMode
 
+    @property
+    def scratchpadAutofocus(self):
+        return self._scratchpadAutofocus
+
+    @scratchpadAutofocus.setter
+    def scratchpadAutofocus(self, scratchpadAutofocus):
+        self._scratchpadAutofocus = scratchpadAutofocus
+        config["SCRATCHPAD_AUTOFOCUS_MODE"] = self._scratchpadAutofocus
+
     def switchWriteMode(self):
         self._writeMode = not self._writeMode
         return self._writeMode
@@ -149,6 +163,10 @@ class Tracker:
     def switchOCRMode(self):
         self._betterOCR = not self._betterOCR
         return self._betterOCR
+
+    def switchScratchpadAutofocus(self):
+        self.scratchpadAutofocus = not self.scratchpadAutofocus
+        return self.scratchpadAutofocus
 
 
 class PImage(QPixmap):

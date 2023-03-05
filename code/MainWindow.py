@@ -30,6 +30,7 @@ from utils.image_io import mangaFileToImageDir
 from utils.config import config, saveOnClose
 from Workers import BaseWorker
 from Ribbon import (Ribbon)
+from Docks import DockBase
 from Explorers import (ImageExplorer)
 from Scratchpad import (Scratchpad)
 from Views import (OCRCanvas, FullScreen)
@@ -59,24 +60,25 @@ class MainWindow(QMainWindow):
         self.vLayout.addWidget(self.ribbon)
         self.canvas = OCRCanvas(self, self.tracker)
         self.explorer = ImageExplorer(self, self.tracker)
-        self.scratchpad = Scratchpad(self)
+        self.scratchpad = Scratchpad(self, self.tracker)
 
-        _sideWidget = QWidget()
-        sideLayout = QVBoxLayout(_sideWidget)
-        sideLayout.addWidget(self.explorer)
-        sideLayout.addWidget(self.scratchpad)
-        sideLayout.setContentsMargins(0, 0, 0, 0)
+        self.dockExp = DockBase(self, self.explorer)
+        self.dockExp.setWindowTitle("Files")
+        self.dockScratch = DockBase(self, self.scratchpad, True)
+        self.dockScratch.setWindowTitle("Scratchpad")
 
         _viewWidget = QWidget()
         hLayout = QHBoxLayout(_viewWidget)
-        hLayout.addWidget(_sideWidget, config["NAV_VIEW_RATIO"][0])
-        hLayout.addWidget(self.canvas, config["NAV_VIEW_RATIO"][1])
+        hLayout.addWidget(self.canvas)
         hLayout.setContentsMargins(0, 0, 0, 0)
 
         self.vLayout.addWidget(_viewWidget)
         _mainWidget = QWidget()
         _mainWidget.setLayout(self.vLayout)
         self.setCentralWidget(_mainWidget)
+
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.dockExp)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.dockScratch)
 
         self.threadpool = QThreadPool()
 
@@ -301,6 +303,15 @@ class MainWindow(QMainWindow):
 
     def toggleLogging(self):
         self.tracker.switchWriteMode()
+
+    def toggleScratchpadAutofocus(self):
+        self.tracker.switchScratchpadAutofocus()
+
+# ----------------------- Button State Initialization ------------------------ #
+
+    def initButtonState(self):
+        scratchpadButton = self.ribbon.findChild(QPushButton, "toggleScratchpadAutofocus")
+        scratchpadButton.setChecked(not self.tracker.scratchpadAutofocus)
 
 # --------------------------- Always On Functions ---------------------------- #
 

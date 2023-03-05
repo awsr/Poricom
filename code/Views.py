@@ -24,7 +24,7 @@ from PyQt5.QtCore import (Qt, QRectF, QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtCore import (Qt, QRect, QSize, QRectF,
                           QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtWidgets import (
-    QApplication, QGraphicsView, QGraphicsScene, QLabel)
+    QApplication, QGraphicsView, QGraphicsScene, QLabel, QWidget)
 
 from Workers import BaseWorker
 from utils.image_io import logText, pixboxToText
@@ -66,6 +66,9 @@ class BaseCanvas(QGraphicsView):
         text = self.canvasText.text()
         logText(text, mode=logToFile, path=logPath)
         self.canvasText.hide()
+        if (self.tracker.scratchpadAutofocus):
+            QWidget.activateWindow(self.tracker.scratchpad)
+            QWidget.setFocus(self.tracker.scratchpad)
         super().mouseReleaseEvent(event)
 
     @pyqtSlot()
