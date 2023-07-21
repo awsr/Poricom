@@ -21,7 +21,7 @@ LANGUAGE = [ " Japanese", " Korean", " Chinese SIM", " Chinese TRA  ", " English
 ORIENTATION = [ " Vertical", " Horizontal",]
 FONT_STYLE = [ " Helvetica", " Poppins", " Arial", " Verdana", " Times New Roman", " Yu Gothic",]
 FONT_SIZE = [ " 12", " 14", " 16", " 20", " 24", " 32", " 40", " 56", " 72",]
-IMAGE_SCALING= [ " Fit to Width", " Fit to Height", " Fit to Screen",]
+IMAGE_SCALING= [ " Fit to Width", " Fit to Height", " Fit to Screen", " Original",]
 MODIFIER = [ " Ctrl", " Shift", " Alt", " Ctrl+Alt", " Shift+Alt", " Shift+Ctrl", " Shift+Alt+Ctrl", " No Modifier"]
 
 # Filepath

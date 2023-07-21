@@ -148,6 +148,8 @@ class OCRCanvas(BaseCanvas):
         elif self._viewImageMode == 2:
             self.pixmap.setPixmap(self.tracker.pixImage.scaled(
                 w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        elif self._viewImageMode == 3:
+            self.pixmap.setPixmap(self.tracker.pixImage)
         self.scene.setSceneRect(QRectF(self.pixmap.pixmap().rect()))
 
     def setViewImageMode(self, mode):
