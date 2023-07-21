@@ -311,7 +311,7 @@ class MainWindow(QMainWindow):
 
     def initButtonState(self):
         scratchpadButton = self.ribbon.findChild(QPushButton, "toggleScratchpadAutofocus")
-        scratchpadButton.setChecked(not self.tracker.scratchpadAutofocus)
+        scratchpadButton.setChecked(self.tracker.scratchpadAutofocus)
 
 # --------------------------- Always On Functions ---------------------------- #
 
