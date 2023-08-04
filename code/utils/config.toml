@@ -23,6 +23,7 @@ FONT_STYLE = [ " Helvetica", " Poppins", " Arial", " Verdana", " Times New Roman
 FONT_SIZE = [ " 12", " 14", " 16", " 20", " 24", " 32", " 40", " 56", " 72",]
 IMAGE_SCALING= [ " Fit to Width", " Fit to Height", " Fit to Screen", " Original",]
 MODIFIER = [ " Ctrl", " Shift", " Alt", " Ctrl+Alt", " Shift+Alt", " Shift+Ctrl", " Shift+Alt+Ctrl", " No Modifier"]
+TEXT_MODIFICATIONS = [["．．．", "…"],]
 
 # Filepath
 STYLES_PATH = "./assets/"
@@ -245,6 +246,15 @@ navClicked = "viewImageFromExplorer"
     helpMsg = "Automatically set focus to the scratchpad after releasing mouse."
     path = "default_icon.png"
     toggle = true
+    align = "AlignLeft"
+    iconH = 1.0
+    iconW = 1.0
+
+    [TBAR_FUNCS.MISC.setTextAdjustment]
+    helpTitle = "Set Text Autoreplace"
+    helpMsg = "Adjust clipboard text based on defined filters."
+    path = "filter_edit.png"
+    toggle = false
     align = "AlignLeft"
     iconH = 1.0
     iconW = 1.0

@@ -307,6 +307,12 @@ class MainWindow(QMainWindow):
     def toggleScratchpadAutofocus(self):
         self.tracker.switchScratchpadAutofocus()
 
+    def setTextAdjustment(self):
+        self.poricomNoop()
+        return
+        # _____ WIP _____#
+        
+
 # ----------------------- Button State Initialization ------------------------ #
 
     def initButtonState(self):
