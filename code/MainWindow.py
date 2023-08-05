@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
             data["STYLES_DEFAULT"] = darkMode
         elif data["STYLES_DEFAULT"] == darkMode:
             data["STYLES_DEFAULT"] = lightMode
-        with open(config, 'w') as fh:
+        with open(config, 'w', encoding='UTF-8') as fh:
             toml.dump(data, fh)
 
         app = QApplication.instance()
@@ -184,7 +184,7 @@ class MainWindow(QMainWindow):
 
         styles = data["STYLES_DEFAULT"]
         self.config["STYLES_DEFAULT"] = data["STYLES_DEFAULT"]
-        with open(styles, 'r') as fh:
+        with open(styles, 'r', encoding='UTF-8') as fh:
             app.setStyleSheet(fh.read())
 
     def modifyFontSettings(self):
@@ -196,7 +196,7 @@ class MainWindow(QMainWindow):
             if app is None:
                 raise RuntimeError("No Qt Application found.")
 
-            with open(config["STYLES_DEFAULT"], 'r') as fh:
+            with open(config["STYLES_DEFAULT"], 'r', encoding='UTF-8') as fh:
                 app.setStyleSheet(fh.read())
 
     def toggleSplitView(self):
