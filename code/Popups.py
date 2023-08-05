@@ -31,10 +31,12 @@ class MessagePopup(QMessageBox):
 
 
 class BasePicker(QWidget):
-    def __init__(self, parent, tracker, optionLists=[]):
+    def __init__(self, parent, tracker, optionLists=None):
         super(QWidget, self).__init__()
         self.parent = parent
         self.tracker = tracker
+        if optionLists is None:
+            optionLists = []
 
         self.layout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
