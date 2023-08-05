@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import sleep
 import math
 
-from PyQt5.QtCore import (Qt, QRectF, QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtCore import (Qt, QRect, QSize, QRectF,
                           QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtWidgets import (
