@@ -65,12 +65,12 @@ def pixboxToText(pixmap, lang="jpn_vert", model=None):
     buffer = QBuffer()
     buffer.open(QBuffer.ReadWrite)
     pixmap.save(buffer, "PNG")
-    bytes = BytesIO(buffer.data())
+    byte_data = BytesIO(buffer.data())
 
-    if bytes.getbuffer().nbytes == 0:
+    if byte_data.getbuffer().nbytes == 0:
         return
 
-    pillowImage = Image.open(bytes)
+    pillowImage = Image.open(byte_data)
     text = ""
 
     if model is not None:
