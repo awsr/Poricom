@@ -51,10 +51,10 @@ def mangaFileToImageDir(filepath):
         except pdf2image.exceptions.PDFInfoNotInstalledError:
             images = pdf2image.convert_from_path(
                 filepath, poppler_path="poppler/Library/bin")
-        for i in range(len(images)):
+        for i, image in enumerate(images):
             filename = basename(extractPath)
             Path(cachePath).mkdir(parents=True, exist_ok=True)
-            images[i].save(
+            image.save(
                 f"{cachePath}/{i+1}_{filename}.png", 'PNG')
 
     return cachePath

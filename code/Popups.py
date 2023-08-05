@@ -44,11 +44,9 @@ class BasePicker(QWidget):
         _comboBoxList = []
         _labelList = []
 
-        for i in range(len(optionLists)):
-            optionList = optionLists[i]
-
+        for i, option in enumerate(optionLists):
             _comboBoxList.append(QComboBox())
-            _comboBoxList[i].addItems(optionList)
+            _comboBoxList[i].addItems(option)
             self.layout.addWidget(_comboBoxList[i], i, 1)
             _labelList.append(QLabel(""))
             self.layout.addWidget(_labelList[i], i, 0)
