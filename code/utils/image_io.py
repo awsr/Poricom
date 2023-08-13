@@ -30,6 +30,7 @@ import rarfile
 import pdf2image
 
 from utils.config import config
+from TextHandler import (formatter)
 
 
 def mangaFileToImageDir(filepath):
@@ -84,7 +85,7 @@ def pixboxToText(pixmap, lang="jpn_vert", model=None):
             api.SetImage(pillowImage)
             text = api.GetUTF8Text()
 
-    return text.strip()
+    return formatter.process(text.strip())
 
 
 def logText(text, mode=False, path="."):

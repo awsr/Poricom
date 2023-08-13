@@ -36,6 +36,7 @@ from Scratchpad import (Scratchpad)
 from Views import (OCRCanvas, FullScreen)
 from Popups import (FontPicker, LanguagePicker, ScaleImagePicker,
                     ShortcutPicker, PickerPopup, MessagePopup, TextModsPicker)
+from TextHandler import (formatter)
 
 
 class WinEventFilter(QAbstractNativeEventFilter):
@@ -81,6 +82,8 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.LeftDockWidgetArea, self.dockScratch)
 
         self.threadpool = QThreadPool()
+
+        formatter.set_rules(config["TEXT_MODIFICATIONS"])
 
     def viewImageFromExplorer(self, filename, filenext):
         if not self.canvas.splitViewMode():
