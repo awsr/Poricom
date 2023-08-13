@@ -380,9 +380,7 @@ QWidget#rulespicker QListWidget {
 }
 
 QWidget#rulespicker QAbstractItemView:item:selected:!active {
-  font-family: 'Yu Gothic';
-  font-size: 16pt;
-  background-color: #1e1d23;
+  background-color: rgba(24, 50, 78, 0.6);
   color: #eff0f1;
 }
 
@@ -402,3 +400,12 @@ QWidget#rulespicker QPushButton {
   color: #eff0f1;
   padding: 2px 8px;
 }
+
+QPushButton#rulespicker_btn_move_up {
+  qproperty-icon: url(./assets/images/icons/ic_fluent_arrow_up_24_filled-dark.svg);
+}
+
+QPushButton#rulespicker_btn_move_down {
+  qproperty-icon: url(./assets/images/icons/ic_fluent_arrow_down_24_filled-dark.svg);
+}
+

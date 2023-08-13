@@ -392,6 +392,7 @@ QWidget#rulespicker QListWidget {
   background-color: #ffffff;
   color: #000000;
 }
+/*
 QWidget#rulespicker QPushButton {
   color: #eff0f1;
   padding: 2px 8px;
