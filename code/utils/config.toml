@@ -21,8 +21,9 @@ LANGUAGE = [ " Japanese", " Korean", " Chinese SIM", " Chinese TRA  ", " English
 ORIENTATION = [ " Vertical", " Horizontal",]
 FONT_STYLE = [ " Helvetica", " Poppins", " Arial", " Verdana", " Times New Roman", " Yu Gothic",]
 FONT_SIZE = [ " 12", " 14", " 16", " 20", " 24", " 32", " 40", " 56", " 72",]
-IMAGE_SCALING= [ " Fit to Width", " Fit to Height", " Fit to Screen",]
+IMAGE_SCALING= [ " Fit to Width", " Fit to Height", " Fit to Screen", " Original",]
 MODIFIER = [ " Ctrl", " Shift", " Alt", " Ctrl+Alt", " Shift+Alt", " Shift+Ctrl", " Shift+Alt+Ctrl", " No Modifier"]
+TEXT_MODIFICATIONS = [["．．．", "…"],]
 
 # Filepath
 STYLES_PATH = "./assets/"
@@ -72,6 +73,10 @@ captureExternalTip = "This will minimize the app and perform OCR on the current 
 [NAV_FUNCS]
 pathChanged = "viewImageFromFDialog"
 navClicked = "viewImageFromExplorer"
+
+[RULES_PICKER_ICONS]
+moveUp = "./assets/images/icons/ic_fluent_arrow_up_24_filled.svg"
+moveDown = "./assets/images/icons/ic_fluent_arrow_down_24_filled.svg"
 
 # Ribbon buttons (always on)
 [MODE_FUNCS]
@@ -245,6 +250,15 @@ navClicked = "viewImageFromExplorer"
     helpMsg = "Automatically set focus to the scratchpad after releasing mouse."
     path = "default_icon.png"
     toggle = true
+    align = "AlignLeft"
+    iconH = 1.0
+    iconW = 1.0
+
+    [TBAR_FUNCS.MISC.setTextAdjustment]
+    helpTitle = "Set Text Autoreplace"
+    helpMsg = "Adjust clipboard text based on defined filters."
+    path = "filter_edit.png"
+    toggle = false
     align = "AlignLeft"
     iconH = 1.0
     iconW = 1.0

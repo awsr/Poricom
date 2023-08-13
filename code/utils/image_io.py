@@ -30,6 +30,7 @@ import rarfile
 import pdf2image
 
 from utils.config import config
+from TextHandler import (formatter)
 
 
 def mangaFileToImageDir(filepath):
@@ -51,10 +52,10 @@ def mangaFileToImageDir(filepath):
         except pdf2image.exceptions.PDFInfoNotInstalledError:
             images = pdf2image.convert_from_path(
                 filepath, poppler_path="poppler/Library/bin")
-        for i in range(len(images)):
+        for i, image in enumerate(images):
             filename = basename(extractPath)
             Path(cachePath).mkdir(parents=True, exist_ok=True)
-            images[i].save(
+            image.save(
                 f"{cachePath}/{i+1}_{filename}.png", 'PNG')
 
     return cachePath
@@ -65,12 +66,12 @@ def pixboxToText(pixmap, lang="jpn_vert", model=None):
     buffer = QBuffer()
     buffer.open(QBuffer.ReadWrite)
     pixmap.save(buffer, "PNG")
-    bytes = BytesIO(buffer.data())
+    byte_data = BytesIO(buffer.data())
 
-    if bytes.getbuffer().nbytes == 0:
+    if byte_data.getbuffer().nbytes == 0:
         return
 
-    pillowImage = Image.open(bytes)
+    pillowImage = Image.open(byte_data)
     text = ""
 
     if model is not None:
@@ -84,7 +85,7 @@ def pixboxToText(pixmap, lang="jpn_vert", model=None):
             api.SetImage(pillowImage)
             text = api.GetUTF8Text()
 
-    return text.strip()
+    return formatter.process(text.strip())
 
 
 def logText(text, mode=False, path="."):

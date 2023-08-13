@@ -35,7 +35,8 @@ from Explorers import (ImageExplorer)
 from Scratchpad import (Scratchpad)
 from Views import (OCRCanvas, FullScreen)
 from Popups import (FontPicker, LanguagePicker, ScaleImagePicker,
-                    ShortcutPicker, PickerPopup, MessagePopup)
+                    ShortcutPicker, PickerPopup, MessagePopup, TextModsPicker)
+from TextHandler import (formatter)
 
 
 class WinEventFilter(QAbstractNativeEventFilter):
@@ -81,6 +82,8 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.LeftDockWidgetArea, self.dockScratch)
 
         self.threadpool = QThreadPool()
+
+        formatter.set_rules(config["TEXT_MODIFICATIONS"])
 
     def viewImageFromExplorer(self, filename, filenext):
         if not self.canvas.splitViewMode():
@@ -175,7 +178,7 @@ class MainWindow(QMainWindow):
             data["STYLES_DEFAULT"] = darkMode
         elif data["STYLES_DEFAULT"] == darkMode:
             data["STYLES_DEFAULT"] = lightMode
-        with open(config, 'w') as fh:
+        with open(config, 'w', encoding='UTF-8') as fh:
             toml.dump(data, fh)
 
         app = QApplication.instance()
@@ -184,7 +187,7 @@ class MainWindow(QMainWindow):
 
         styles = data["STYLES_DEFAULT"]
         self.config["STYLES_DEFAULT"] = data["STYLES_DEFAULT"]
-        with open(styles, 'r') as fh:
+        with open(styles, 'r', encoding='UTF-8') as fh:
             app.setStyleSheet(fh.read())
 
     def modifyFontSettings(self):
@@ -196,7 +199,7 @@ class MainWindow(QMainWindow):
             if app is None:
                 raise RuntimeError("No Qt Application found.")
 
-            with open(config["STYLES_DEFAULT"], 'r') as fh:
+            with open(config["STYLES_DEFAULT"], 'r', encoding='UTF-8') as fh:
                 app.setStyleSheet(fh.read())
 
     def toggleSplitView(self):
@@ -307,11 +310,15 @@ class MainWindow(QMainWindow):
     def toggleScratchpadAutofocus(self):
         self.tracker.switchScratchpadAutofocus()
 
+    def setTextAdjustment(self):
+        confirmation = PickerPopup(TextModsPicker(self, self.tracker))
+        confirmation.exec()
+
 # ----------------------- Button State Initialization ------------------------ #
 
     def initButtonState(self):
         scratchpadButton = self.ribbon.findChild(QPushButton, "toggleScratchpadAutofocus")
-        scratchpadButton.setChecked(not self.tracker.scratchpadAutofocus)
+        scratchpadButton.setChecked(self.tracker.scratchpadAutofocus)
 
 # --------------------------- Always On Functions ---------------------------- #
 

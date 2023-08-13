@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import sleep
 import math
 
-from PyQt5.QtCore import (Qt, QRectF, QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtCore import (Qt, QRect, QSize, QRectF,
                           QTimer, QThreadPool, pyqtSlot)
 from PyQt5.QtWidgets import (
@@ -148,6 +147,8 @@ class OCRCanvas(BaseCanvas):
         elif self._viewImageMode == 2:
             self.pixmap.setPixmap(self.tracker.pixImage.scaled(
                 w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        elif self._viewImageMode == 3:
+            self.pixmap.setPixmap(self.tracker.pixImage)
         self.scene.setSceneRect(QRectF(self.pixmap.pixmap().rect()))
 
     def setViewImageMode(self, mode):

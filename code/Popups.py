@@ -19,7 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5.QtCore import (Qt)
 from PyQt5.QtWidgets import (QGridLayout, QVBoxLayout, QWidget, QLabel,
-                             QLineEdit, QComboBox, QDialog, QDialogButtonBox, QMessageBox)
+                             QLineEdit, QComboBox, QDialog, QDialogButtonBox, QMessageBox, QListWidget, QPushButton)
+from PyQt5.QtGui import (QIcon)
 
 from utils.config import (editSelectionConfig, editStylesheet)
 
@@ -30,11 +31,131 @@ class MessagePopup(QMessageBox):
             QMessageBox.NoIcon, title, message, flags)
 
 
+class RulesPicker(QWidget):
+    def __init__(self, parent, tracker):
+        super(QWidget, self).__init__()
+        self.setObjectName("rulespicker")
+        self.parent = parent
+        self.tracker = tracker
+        self.raw_data = []
+        # I know it's not the "proper" way of handling data in Qt, but it's good enough.
+
+        self.layout = QGridLayout(self)
+        self.layout.setContentsMargins(9, 9, 9, 9)
+
+        self.input1 = QLineEdit(self)
+        self.input2 = QLineEdit(self)
+        self.button_add = QPushButton("Add", self)
+        self.button_add.setDefault(True)
+        self.button_del = QPushButton("Del", self)
+        self.display_list = QListWidget(self)
+
+        self.vertical_layout = QVBoxLayout()
+        self.vertical_layout.setObjectName("rulesvertical")
+
+        self.button_move_up = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveUp"]), "", self)
+        self.button_move_up.setObjectName("rulespicker_btn_move_up")
+        self.button_move_down = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveDown"]), "", self)
+        self.button_move_down.setObjectName("rulespicker_btn_move_down")
+
+        self.layout.addWidget(self.input1, 0, 0, 1, 1)
+        self.layout.addWidget(self.input2, 0, 1, 1, 1)
+        self.layout.addWidget(self.button_add, 0, 2, 1, 1)
+        self.layout.addWidget(self.display_list, 1, 0, 1, 2)
+    
+        self.layout.addLayout(self.vertical_layout, 1, 2, 1, 1)
+        self.vertical_layout.addWidget(self.button_del)
+        self.vertical_layout.addStretch(1)
+        self.vertical_layout.addWidget(self.button_move_up)
+        self.vertical_layout.addWidget(self.button_move_down)
+        self.vertical_layout.addStretch(1)
+
+        self.button_add.clicked.connect(self.add_rule)
+        self.button_del.clicked.connect(self.del_rule)
+        self.button_move_up.clicked.connect(lambda: self.move_rule(True))
+        self.button_move_down.clicked.connect(lambda: self.move_rule(False))
+        self.display_list.currentRowChanged.connect(self.move_manager)
+
+        if self.display_list.count() <= 1:
+            self.button_move_up.setEnabled(False)
+            self.button_move_down.setEnabled(False)
+
+    def move_manager(self):
+        """Enable/Disable move buttons depending on selection"""
+        current_row = self.display_list.currentRow()
+        if current_row == 0:
+            self.button_move_up.setEnabled(False)
+        else:
+            self.button_move_up.setEnabled(True)
+
+        if current_row == self.display_list.count() - 1:
+            self.button_move_down.setEnabled(False)
+        else:
+            self.button_move_down.setEnabled(True)
+
+    def add_rule(self):
+        """Add input to internal rules list, add to list, and then clear inputs"""
+        self.input1.setText(self.input1.text().strip())
+        self.input2.setText(self.input2.text().strip())
+        if self.input1.text() != "" and self.input2.text() != "":
+            self.raw_data.append([self.input1.text(), self.input2.text()])
+            self.display_list.addItem(self.format_to_text(self.input1.text(), self.input2.text()))
+            self.input1.clear()
+            self.input2.clear()
+            self.input1.setFocus()
+
+    def del_rule(self):
+        """Delete rule at currently selected index (not entirely sure this is the right way)"""
+        current_row = self.display_list.currentRow()
+        if current_row >= 0:
+            current_item = self.display_list.takeItem(current_row)
+            del current_item
+            current_rule = self.raw_data.pop(current_row)
+            del current_rule
+
+    def move_rule(self, up=False):
+        """Move selected rule up or down"""
+        current_row = self.display_list.currentRow()
+        if current_row >= 0:
+            current_item = self.display_list.takeItem(current_row)
+            if up:
+                self.display_list.insertItem(current_row - 1, current_item)
+                self.display_list.setCurrentRow(current_row - 1)
+            else:
+                self.display_list.insertItem(current_row + 1, current_item)
+                self.display_list.setCurrentRow(current_row + 1)
+
+    def format_to_text(self, rule1, rule2=None):
+        """String formatting"""
+        if isinstance(rule1, list):
+            return f"{rule1[0]} ⟹ {rule1[1]}"
+        return f"{rule1} ⟹ {rule2}"
+
+    def save_rules(self):
+        """Save rules back out to config"""
+        self.tracker.text_rules = self.raw_data
+
+
+class TextModsPicker(RulesPicker):
+    def __init__(self, parent, tracker):
+        super().__init__(parent, tracker)
+
+        for entry in self.tracker.text_rules:
+            self.raw_data.append(entry)
+            self.display_list.addItem(self.format_to_text(entry))
+
+    def applyChanges(self):
+        self.save_rules()
+        return True
+
+
 class BasePicker(QWidget):
-    def __init__(self, parent, tracker, optionLists=[]):
+    def __init__(self, parent, tracker, optionLists=None):
         super(QWidget, self).__init__()
         self.parent = parent
         self.tracker = tracker
+        if optionLists is None:
+            optionLists = []
 
         self.layout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -42,11 +163,9 @@ class BasePicker(QWidget):
         _comboBoxList = []
         _labelList = []
 
-        for i in range(len(optionLists)):
-            optionList = optionLists[i]
-
+        for i, option in enumerate(optionLists):
             _comboBoxList.append(QComboBox())
-            _comboBoxList[i].addItems(optionList)
+            _comboBoxList[i].addItems(option)
             self.layout.addWidget(_comboBoxList[i], i, 1)
             _labelList.append(QLabel(""))
             self.layout.addWidget(_labelList[i], i, 0)

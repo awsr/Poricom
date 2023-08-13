@@ -364,3 +364,48 @@ QTextEdit#scratchpad {
   border: 1px solid #7988A6;
   color: #eff0f1;
 }
+
+/* Rules Picker */
+QWidget#rulespicker {
+  background-color:#1e1d23;
+  font-size: 16pt;
+  color: #eff0f1;
+}
+
+QWidget#rulespicker QListWidget {
+  font-family: 'Yu Gothic';
+  font-size: 16pt;
+  background-color: #1e1d23;
+  color: #eff0f1;
+}
+
+QWidget#rulespicker QAbstractItemView:item:selected:!active {
+  background-color: rgba(24, 50, 78, 0.6);
+  color: #eff0f1;
+}
+
+QWidget#rulespicker QLineEdit {
+  border-width: 1px; border-radius: 4px;
+  border-color: rgb(58, 58, 58);
+  border-style: inset;
+  padding: 2px 8px;
+  font-size: 16pt;
+  color: #eff0f1;
+  background:#1e1d23;
+  selection-background-color:#007b50;
+  selection-color: #FFFFFF;
+}
+
+QWidget#rulespicker QPushButton {
+  color: #eff0f1;
+  padding: 2px 8px;
+}
+
+QPushButton#rulespicker_btn_move_up {
+  qproperty-icon: url(./assets/images/icons/ic_fluent_arrow_up_24_filled-dark.svg);
+}
+
+QPushButton#rulespicker_btn_move_down {
+  qproperty-icon: url(./assets/images/icons/ic_fluent_arrow_down_24_filled-dark.svg);
+}
+

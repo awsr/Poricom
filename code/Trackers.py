@@ -51,6 +51,11 @@ class Tracker:
         if config ["SCRATCHPAD_AUTOFOCUS_MODE"]:
             self._scratchpadAutofocus = True
 
+        self._text_rules = []
+        for rule in config["TEXT_MODIFICATIONS"]:
+            self._text_rules.append([rule[0], rule[1]])
+
+
     def twoFileToImage(self, fileLeft, fileRight):
         imageLeft, imageRight = PImage(fileLeft), PImage(fileRight)
         if not (imageLeft.isValid()):
@@ -155,6 +160,15 @@ class Tracker:
     def scratchpadAutofocus(self, scratchpadAutofocus):
         self._scratchpadAutofocus = scratchpadAutofocus
         config["SCRATCHPAD_AUTOFOCUS_MODE"] = self._scratchpadAutofocus
+
+    @property
+    def text_rules(self):
+        return self._text_rules
+
+    @text_rules.setter
+    def text_rules(self, rules):
+        self._text_rules = rules
+        config["TEXT_MODIFICATIONS"] = self._text_rules
 
     def switchWriteMode(self):
         self._writeMode = not self._writeMode
