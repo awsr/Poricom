@@ -74,6 +74,10 @@ captureExternalTip = "This will minimize the app and perform OCR on the current 
 pathChanged = "viewImageFromFDialog"
 navClicked = "viewImageFromExplorer"
 
+[RULES_PICKER_ICONS]
+moveUp = "./assets/images/icons/ic_fluent_arrow_up_24_filled.svg"
+moveDown = "./assets/images/icons/ic_fluent_arrow_down_24_filled.svg"
+
 # Ribbon buttons (always on)
 [MODE_FUNCS]
 
