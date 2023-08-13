@@ -50,7 +50,7 @@ class Tracker:
         self._scratchpadAutofocus = False
         if config ["SCRATCHPAD_AUTOFOCUS_MODE"]:
             self._scratchpadAutofocus = True
-        
+
         self._text_rules = []
         for rule in config["TEXT_MODIFICATIONS"]:
             self._text_rules.append([rule[0], rule[1]])
