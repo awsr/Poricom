@@ -45,6 +45,7 @@ class RulesPicker(QWidget):
         self.input1 = QLineEdit(self)
         self.input2 = QLineEdit(self)
         self.button_add = QPushButton("Add", self)
+        self.button_add.setDefault(True)
         self.button_del = QPushButton("Del", self)
         self.display_list = QListWidget(self)
 
@@ -66,6 +67,7 @@ class RulesPicker(QWidget):
             self.display_list.addItem(self.format_to_text(self.input1.text(), self.input2.text()))
             self.input1.clear()
             self.input2.clear()
+            self.input1.setFocus()
 
     def del_rule(self):
         """Delete rule at currently selected index (not entirely sure this is the right way)"""
