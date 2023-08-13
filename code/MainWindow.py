@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
 
         self.threadpool = QThreadPool()
 
-        formatter.set_rules(config["TEXT_MODIFICATIONS"])
+        formatter.set_rules(self.tracker.text_rules)
 
     def viewImageFromExplorer(self, filename, filenext):
         if not self.canvas.splitViewMode():
