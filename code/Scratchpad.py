@@ -15,13 +15,14 @@ class Scratchpad(QTextEdit):
         self.setObjectName("scratchpad")
         tracker.scratchpad = self
 
-        self.addTextSc = QShortcut("Ctrl+Shift+V", self)
-        self.addTextSc.activated.connect(lambda: self.append(QApplication.clipboard().text()))
+        self.menu = self.createStandardContextMenu()
+        self.append_action = self.menu.addAction("Append", lambda: self.append(QApplication.clipboard().text()), "Ctrl+Shift+V")
+        self.append_separator = self.menu.addSeparator()
+        self.menu.insertAction(self.menu.actions()[0], self.append_separator)
+        self.menu.insertAction(self.append_separator, self.append_action)
+
+        self.shortcut_append = QShortcut("Ctrl+Shift+V", self)
+        self.shortcut_append.activated.connect(lambda: self.append(QApplication.clipboard().text()))
 
     def contextMenuEvent(self, e: QContextMenuEvent) -> None:
-        self.menu = self.createStandardContextMenu()
-        self.appendAction = self.menu.addAction("Append", lambda: self.append(QApplication.clipboard().text()), "Ctrl+Shift+V")
-        self.appendSeparator = self.menu.addSeparator()
-        self.menu.insertAction(self.menu.actions()[0], self.appendSeparator)
-        self.menu.insertAction(self.appendSeparator, self.appendAction)
         self.menu.exec(e.globalPos())
