@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5.QtCore import (Qt)
 from PyQt5.QtWidgets import (QGridLayout, QVBoxLayout, QWidget, QLabel,
-                             QLineEdit, QComboBox, QDialog, QDialogButtonBox, QMessageBox)
+                             QLineEdit, QComboBox, QDialog, QDialogButtonBox, QMessageBox, QListWidget, QPushButton)
 
 from utils.config import (editSelectionConfig, editStylesheet)
 
@@ -28,6 +28,76 @@ class MessagePopup(QMessageBox):
     def __init__(self, title, message, flags=QMessageBox.Ok):
         super(QMessageBox, self).__init__(
             QMessageBox.NoIcon, title, message, flags)
+
+
+class RulesPicker(QWidget):
+    def __init__(self, parent, tracker):
+        super(QWidget, self).__init__()
+        self.setObjectName("rulespicker")
+        self.parent = parent
+        self.tracker = tracker
+        self.raw_data = []
+        # I know it's not the "proper" way of handling data in Qt, but it's good enough.
+
+        self.layout = QGridLayout(self)
+        self.layout.setContentsMargins(9, 9, 9, 9)
+
+        self.input1 = QLineEdit(self)
+        self.input2 = QLineEdit(self)
+        self.button_add = QPushButton("Add", self)
+        self.button_del = QPushButton("Del", self)
+        self.display_list = QListWidget(self)
+
+        self.layout.addWidget(self.input1, 0, 0, 1, 1)
+        self.layout.addWidget(self.input2, 0, 1, 1, 1)
+        self.layout.addWidget(self.button_add, 0, 2, 1, 1)
+        self.layout.addWidget(self.display_list, 1, 0, 1, 2)
+        self.layout.addWidget(self.button_del, 1, 2, 1, 1)
+
+        self.button_add.clicked.connect(self.add_rule)
+        self.button_del.clicked.connect(self.del_rule)
+
+    def add_rule(self):
+        """Add input to internal rules list, add to list, and then clear inputs"""
+        self.input1.setText(self.input1.text().strip())
+        self.input2.setText(self.input2.text().strip())
+        if self.input1.text() != "" and self.input2.text() != "":
+            self.raw_data.append([self.input1.text(), self.input2.text()])
+            self.display_list.addItem(self.format_to_text(self.input1.text(), self.input2.text()))
+            self.input1.clear()
+            self.input2.clear()
+
+    def del_rule(self):
+        """Delete rule at currently selected index (not entirely sure this is the right way)"""
+        current_row = self.display_list.currentRow()
+        if current_row >= 0:
+            current_item = self.display_list.takeItem(current_row)
+            del current_item
+            current_rule = self.raw_data.pop(current_row)
+            del current_rule
+
+    def format_to_text(self, rule1, rule2=None):
+        """String formatting"""
+        if isinstance(rule1, list):
+            return f"{rule1[0]} ⟹ {rule1[1]}"
+        return f"{rule1} ⟹ {rule2}"
+
+    def save_rules(self):
+        """Save rules back out to config"""
+        self.tracker.text_rules = self.raw_data
+
+
+class TextModsPicker(RulesPicker):
+    def __init__(self, parent, tracker):
+        super().__init__(parent, tracker)
+
+        for entry in self.tracker.text_rules:
+            self.raw_data.append(entry)
+            self.display_list.addItem(self.format_to_text(entry))
+
+    def applyChanges(self):
+        self.save_rules()
+        return True
 
 
 class BasePicker(QWidget):

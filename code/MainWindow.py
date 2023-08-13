@@ -35,7 +35,7 @@ from Explorers import (ImageExplorer)
 from Scratchpad import (Scratchpad)
 from Views import (OCRCanvas, FullScreen)
 from Popups import (FontPicker, LanguagePicker, ScaleImagePicker,
-                    ShortcutPicker, PickerPopup, MessagePopup)
+                    ShortcutPicker, PickerPopup, MessagePopup, TextModsPicker)
 
 
 class WinEventFilter(QAbstractNativeEventFilter):
@@ -308,10 +308,8 @@ class MainWindow(QMainWindow):
         self.tracker.switchScratchpadAutofocus()
 
     def setTextAdjustment(self):
-        self.poricomNoop()
-        return
-        # _____ WIP _____#
-        
+        confirmation = PickerPopup(TextModsPicker(self, self.tracker))
+        confirmation.exec()
 
 # ----------------------- Button State Initialization ------------------------ #
 

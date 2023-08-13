@@ -363,3 +363,37 @@ QTextEdit#scratchpad {
   font-size: 20pt;
   border: 1px solid #515B70;
 }
+
+/* Rules Picker */
+QWidget#rulespicker {
+  font-size: 12pt;
+  color: #000;
+  background-color:#f0f0f0;
+}
+
+QWidget#rulespicker QLineEdit {
+  font-family: 'Yu Gothic';
+  font-size: 16pt;
+  padding: 0.2em;
+  border: 0.1em solid #76797c;
+  color: rgb(17,17,17);
+  background-color:rgb(255,255,255);
+  selection-background-color:rgb(236,116,64);
+  border-radius: 0.1em;
+}
+
+QWidget#rulespicker QLineEdit:hover {
+  border: 0.1em solid #3b3b42;
+}
+
+QWidget#rulespicker QListWidget {
+  font-family: 'Yu Gothic';
+  font-size: 16pt;
+  background-color: #ffffff;
+  color: #000000;
+}
+QWidget#rulespicker QPushButton {
+  color: #eff0f1;
+  padding: 2px 8px;
+}
+/*
