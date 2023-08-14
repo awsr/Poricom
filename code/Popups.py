@@ -45,9 +45,11 @@ class RulesPicker(QWidget):
 
         self.input1 = QLineEdit(self)
         self.input2 = QLineEdit(self)
-        self.button_add = QPushButton("Add", self)
+        self.button_add = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["add"]), "", self)
+        self.button_add.setObjectName("rulespicker_btn_add")
         self.button_add.setDefault(True)
-        self.button_del = QPushButton("Del", self)
+        self.button_del = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["del"]), "", self)
+        self.button_del.setObjectName("rulespicker_btn_del")
         self.display_list = QListWidget(self)
 
         self.vertical_layout = QVBoxLayout()

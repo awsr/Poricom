@@ -401,6 +401,14 @@ QWidget#rulespicker QPushButton {
   padding: 2px 8px;
 }
 
+QPushButton#rulespicker_btn_add {
+  qproperty-icon: url(./assets/images/icons/ic_fluent_add_24_filled-dark.svg);
+}
+
+QPushButton#rulespicker_btn_del {
+  qproperty-icon: url(./assets/images/icons/ic_fluent_subtract_24_filled-dark.svg);
+}
+
 QPushButton#rulespicker_btn_move_up {
   qproperty-icon: url(./assets/images/icons/ic_fluent_arrow_up_24_filled-dark.svg);
 }
