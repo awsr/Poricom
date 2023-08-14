@@ -31,6 +31,21 @@ class MessagePopup(QMessageBox):
             QMessageBox.NoIcon, title, message, flags)
 
 
+class RuleLineEdit(QLineEdit):
+    """Workaround QLineEdit class for an unusual bug causing the
+       default button to lose its Default status the first time it
+       gets and then loses focus. When this control gets focus,
+       it will reset the targeted button's status as Default."""
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.default_target = None
+
+    def focusInEvent(self, event):
+        if self.default_target is not None:
+            self.default_target.setDefault(True)
+        super().focusInEvent(event)
+
+
 class RulesPicker(QWidget):
     def __init__(self, parent, tracker):
         super(QWidget, self).__init__()
@@ -43,34 +58,40 @@ class RulesPicker(QWidget):
         self.layout = QGridLayout(self)
         self.layout.setContentsMargins(9, 9, 9, 9)
 
-        self.input1 = QLineEdit(self)
-        self.input2 = QLineEdit(self)
+        self.input1 = RuleLineEdit(self)
+        self.input2 = RuleLineEdit(self)
         self.button_add = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["add"]), "", self)
         self.button_add.setObjectName("rulespicker_btn_add")
         self.button_add.setDefault(True)
         self.button_del = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["del"]), "", self)
         self.button_del.setObjectName("rulespicker_btn_del")
+        self.button_del.setAutoDefault(False)
         self.display_list = QListWidget(self)
 
         self.vertical_layout = QVBoxLayout()
         self.vertical_layout.setObjectName("rulesvertical")
 
         self.button_move_up = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveUp"]), "", self)
+        self.button_move_up.setAutoDefault(False)
         self.button_move_up.setObjectName("rulespicker_btn_move_up")
         self.button_move_down = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveDown"]), "", self)
+        self.button_move_down.setAutoDefault(False)
         self.button_move_down.setObjectName("rulespicker_btn_move_down")
 
         self.layout.addWidget(self.input1, 0, 0, 1, 1)
         self.layout.addWidget(self.input2, 0, 1, 1, 1)
         self.layout.addWidget(self.button_add, 0, 2, 1, 1)
         self.layout.addWidget(self.display_list, 1, 0, 1, 2)
-    
+
         self.layout.addLayout(self.vertical_layout, 1, 2, 1, 1)
         self.vertical_layout.addWidget(self.button_del)
         self.vertical_layout.addStretch(1)
         self.vertical_layout.addWidget(self.button_move_up)
         self.vertical_layout.addWidget(self.button_move_down)
         self.vertical_layout.addStretch(1)
+
+        self.input1.default_target = self.button_add
+        self.input2.default_target = self.button_add
 
         self.button_add.clicked.connect(self.add_rule)
         self.button_del.clicked.connect(self.del_rule)
@@ -352,6 +373,10 @@ class PickerPopup(QDialog):
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.layout().addWidget(self.buttonBox)
+
+        # Stop annoying autoDefault behavior stealing from explicit defaults
+        for button in self.buttonBox.buttons():
+            button.setAutoDefault(False)
 
         self.buttonBox.rejected.connect(self.cancelClickedEvent)
         self.buttonBox.accepted.connect(self.accept)
