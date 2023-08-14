@@ -75,6 +75,8 @@ pathChanged = "viewImageFromFDialog"
 navClicked = "viewImageFromExplorer"
 
 [RULES_PICKER_ICONS]
+add = "./assets/images/icons/ic_fluent_add_24_filled.svg"
+del = "./assets/images/icons/ic_fluent_subtract_24_filled.svg"
 moveUp = "./assets/images/icons/ic_fluent_arrow_up_24_filled.svg"
 moveDown = "./assets/images/icons/ic_fluent_arrow_down_24_filled.svg"
 
