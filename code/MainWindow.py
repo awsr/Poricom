@@ -169,16 +169,16 @@ class MainWindow(QMainWindow):
 # ------------------------------ View Functions ------------------------------ #
 
     def toggleStylesheet(self):
-        config = "./utils/config.toml"
+        configPath = "./utils/config.toml"
         lightMode = "./assets/styles.qss"
         darkMode = "./assets/styles-dark.qss"
 
-        data = toml.load(config)
+        data = toml.load(configPath)
         if data["STYLES_DEFAULT"] == lightMode:
             data["STYLES_DEFAULT"] = darkMode
         elif data["STYLES_DEFAULT"] == darkMode:
             data["STYLES_DEFAULT"] = lightMode
-        with open(config, 'w', encoding='UTF-8') as fh:
+        with open(configPath, 'w', encoding='UTF-8') as fh:
             toml.dump(data, fh)
 
         app = QApplication.instance()
