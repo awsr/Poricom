@@ -99,9 +99,8 @@ class RulesPicker(QWidget):
         self.button_move_down.clicked.connect(lambda: self.move_rule(False))
         self.display_list.currentRowChanged.connect(self.move_manager)
 
-        if self.display_list.count() <= 1:
-            self.button_move_up.setEnabled(False)
-            self.button_move_down.setEnabled(False)
+        self.button_move_up.setEnabled(False)
+        self.button_move_down.setEnabled(False)
 
     def move_manager(self):
         """Enable/Disable move buttons depending on selection"""
@@ -166,6 +165,8 @@ class TextModsPicker(RulesPicker):
         for entry in self.tracker.text_rules:
             self.raw_data.append(entry)
             self.display_list.addItem(self.format_to_text(entry))
+        if self.display_list.count() > 0:
+            self.display_list.setCurrentRow(self.display_list.count() - 1)
 
     def applyChanges(self):
         self.save_rules()
