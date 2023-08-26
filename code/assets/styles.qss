@@ -386,7 +386,7 @@ QWidget#rulespicker QLineEdit:hover {
   border: 0.1em solid #3b3b42;
 }
 
-QWidget#rulespicker QListWidget {
+QWidget#rulespicker QListView {
   font-family: 'Yu Gothic';
   font-size: 16pt;
   background-color: #ffffff;
