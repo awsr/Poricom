@@ -2,6 +2,7 @@
 Simple little scratchpad
 """
 
+from PyQt5.QtCore import (pyqtSlot)
 from PyQt5.QtWidgets import (QTextEdit, QShortcut, QApplication)
 from PyQt5.QtGui import (QContextMenuEvent)
 
@@ -15,14 +16,20 @@ class Scratchpad(QTextEdit):
         self.setObjectName("scratchpad")
         tracker.scratchpad = self
 
-        self.menu = self.createStandardContextMenu()
-        self.append_action = self.menu.addAction("Append", lambda: self.append(QApplication.clipboard().text()), "Ctrl+Shift+V")
-        self.append_separator = self.menu.addSeparator()
-        self.menu.insertAction(self.menu.actions()[0], self.append_separator)
-        self.menu.insertAction(self.append_separator, self.append_action)
+        self._move_op = self.textCursor().MoveOperation.End
 
         self.shortcut_append = QShortcut("Ctrl+Shift+V", self)
-        self.shortcut_append.activated.connect(lambda: self.append(QApplication.clipboard().text()))
+        self.shortcut_append.activated.connect(self.append_paste)
 
     def contextMenuEvent(self, e: QContextMenuEvent) -> None:
-        self.menu.exec(e.globalPos())
+        menu = self.createStandardContextMenu()
+        append_action = menu.addAction("Append", self.append_paste, "Ctrl+Shift+V")
+        append_separator = menu.addSeparator()
+        menu.insertAction(menu.actions()[0], append_separator)
+        menu.insertAction(append_separator, append_action)
+        menu.exec(e.globalPos())
+
+    @pyqtSlot()
+    def append_paste(self):
+        self.append(QApplication.clipboard().text())
+        self.moveCursor(self._move_op)

@@ -19,10 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5.QtCore import (Qt)
 from PyQt5.QtWidgets import (QGridLayout, QVBoxLayout, QWidget, QLabel,
-                             QLineEdit, QComboBox, QDialog, QDialogButtonBox, QMessageBox, QListWidget, QPushButton)
+                             QLineEdit, QComboBox, QDialog, QDialogButtonBox,
+                             QMessageBox, QListView, QPushButton, QAbstractItemView)
 from PyQt5.QtGui import (QIcon)
 
 from utils.config import (editSelectionConfig, editStylesheet)
+from models import (RuleModel)
 
 
 class MessagePopup(QMessageBox):
@@ -66,7 +68,13 @@ class RulesPicker(QWidget):
         self.button_del = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["del"]), "", self)
         self.button_del.setObjectName("rulespicker_btn_del")
         self.button_del.setAutoDefault(False)
-        self.display_list = QListWidget(self)
+
+        self.display_list = QListView(self)
+        self.model = RuleModel(self)
+        self.display_list.setModel(self.model)
+        self.display_list.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.display_list.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.__select_model = self.display_list.selectionModel()
 
         self.vertical_layout = QVBoxLayout()
         self.vertical_layout.setObjectName("rulesvertical")
@@ -97,65 +105,63 @@ class RulesPicker(QWidget):
         self.button_del.clicked.connect(self.del_rule)
         self.button_move_up.clicked.connect(lambda: self.move_rule(True))
         self.button_move_down.clicked.connect(lambda: self.move_rule(False))
-        self.display_list.currentRowChanged.connect(self.move_manager)
+        self.__select_model.selectionChanged.connect(self.move_manager)
 
         self.button_move_up.setEnabled(False)
         self.button_move_down.setEnabled(False)
 
     def move_manager(self):
         """Enable/Disable move buttons depending on selection"""
-        current_row = self.display_list.currentRow()
-        if current_row == 0:
-            self.button_move_up.setEnabled(False)
-        else:
-            self.button_move_up.setEnabled(True)
+        indexes = self.display_list.selectedIndexes()
+        if indexes:
+            index = indexes[0]
+            row = index.row()
+            if row == 0:
+                self.button_move_up.setEnabled(False)
+            else:
+                self.button_move_up.setEnabled(True)
 
-        if current_row == self.display_list.count() - 1:
-            self.button_move_down.setEnabled(False)
-        else:
-            self.button_move_down.setEnabled(True)
+            if row == len(self.model.rules) - 1:
+                self.button_move_down.setEnabled(False)
+            else:
+                self.button_move_down.setEnabled(True)
 
     def add_rule(self):
         """Add input to internal rules list, add to list, and then clear inputs"""
         self.input1.setText(self.input1.text().strip())
         self.input2.setText(self.input2.text().strip())
         if self.input1.text() != "" and self.input2.text() != "":
-            self.raw_data.append([self.input1.text(), self.input2.text()])
-            self.display_list.addItem(self.format_to_text(self.input1.text(), self.input2.text()))
+            self.model.rules.append((self.input1.text(), self.input2.text()))
+            self.model.layoutChanged.emit()
             self.input1.clear()
             self.input2.clear()
             self.input1.setFocus()
 
     def del_rule(self):
         """Delete rule at currently selected index (not entirely sure this is the right way)"""
-        current_row = self.display_list.currentRow()
-        if current_row >= 0:
-            current_item = self.display_list.takeItem(current_row)
-            del current_item
-            current_rule = self.raw_data.pop(current_row)
-            del current_rule
+        indexes = self.display_list.selectedIndexes()
+        if indexes:
+            index = indexes[0]
+            del self.model.rules[index.row()]
+            self.model.layoutChanged.emit()
+            self.display_list.clearSelection()
 
     def move_rule(self, up=False):
         """Move selected rule up or down"""
-        current_row = self.display_list.currentRow()
-        if current_row >= 0:
-            current_item = self.display_list.takeItem(current_row)
+        indexes = self.display_list.selectedIndexes()
+        if indexes:
+            index = indexes[0]
+            row = index.row()
             if up:
-                self.display_list.insertItem(current_row - 1, current_item)
-                self.display_list.setCurrentRow(current_row - 1)
+                self.model.rules.insert(row - 1, self.model.rules.pop(row))
+                self.display_list.setCurrentIndex(index.siblingAtRow(row - 1))
             else:
-                self.display_list.insertItem(current_row + 1, current_item)
-                self.display_list.setCurrentRow(current_row + 1)
-
-    def format_to_text(self, rule1, rule2=None):
-        """String formatting"""
-        if isinstance(rule1, list):
-            return f"{rule1[0]} ⟹ {rule1[1]}"
-        return f"{rule1} ⟹ {rule2}"
+                self.model.rules.insert(row + 1, self.model.rules.pop(row))
+                self.display_list.setCurrentIndex(index.siblingAtRow(row + 1))
 
     def save_rules(self):
         """Save rules back out to config"""
-        self.tracker.text_rules = self.raw_data
+        self.tracker.text_rules = self.model.rules
 
 
 class TextModsPicker(RulesPicker):
@@ -163,10 +169,8 @@ class TextModsPicker(RulesPicker):
         super().__init__(parent, tracker)
 
         for entry in self.tracker.text_rules:
-            self.raw_data.append(entry)
-            self.display_list.addItem(self.format_to_text(entry))
-        if self.display_list.count() > 0:
-            self.display_list.setCurrentRow(self.display_list.count() - 1)
+            self.model.rules.append(entry)
+            self.model.layoutChanged.emit()
 
     def applyChanges(self):
         self.save_rules()

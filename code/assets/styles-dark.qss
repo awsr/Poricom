@@ -372,7 +372,7 @@ QWidget#rulespicker {
   color: #eff0f1;
 }
 
-QWidget#rulespicker QListWidget {
+QWidget#rulespicker QListView {
   font-family: 'Yu Gothic';
   font-size: 16pt;
   background-color: #1e1d23;
