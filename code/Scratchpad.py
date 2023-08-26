@@ -22,6 +22,8 @@ class Scratchpad(QTextEdit):
         self.menu.insertAction(self.menu.actions()[0], self.append_separator)
         self.menu.insertAction(self.append_separator, self.append_action)
 
+        self._move_op = self.textCursor().MoveOperation.End
+
         self.shortcut_append = QShortcut("Ctrl+Shift+V", self)
         self.shortcut_append.activated.connect(self.append_paste)
 
@@ -31,4 +33,4 @@ class Scratchpad(QTextEdit):
     @pyqtSlot()
     def append_paste(self):
         self.append(QApplication.clipboard().text())
-        self.moveCursor(self.textCursor().MoveOperation.End)
+        self.moveCursor(self._move_op)
