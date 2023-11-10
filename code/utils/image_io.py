@@ -69,7 +69,7 @@ def pixboxToText(pixmap, lang="jpn_vert", model=None):
     byte_data = BytesIO(buffer.data())
 
     if byte_data.getbuffer().nbytes == 0:
-        return
+        return ""
 
     pillowImage = Image.open(byte_data)
     text = ""
