@@ -31,5 +31,7 @@ class Scratchpad(QTextEdit):
 
     @pyqtSlot()
     def append_paste(self):
-        self.append(QApplication.clipboard().text())
-        self.moveCursor(self._move_op)
+        clipboard_text = QApplication.clipboard().text()
+        if len(clipboard_text) > 0:
+            self.append(clipboard_text)
+            self.moveCursor(self._move_op)
