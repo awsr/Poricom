@@ -10,12 +10,12 @@
 
 ## Contents
 - [About](#about)
-- [User Guide](#user_guide)
+- [User Guide](#user-guide)
 - [Installation](#installation)
-- [Acknowledgments](#acknowledgements)
+- [Acknowledgements](#acknowledgements)
 </br></br>
 
-## About <a name = "about"></a>
+## About
 Poricom is a desktop program for optical character recognition in manga images. Although it is a manga OCR application, it can recognize text on other type of images as well. The project is a GUI implementation of the [Manga OCR library](https://pypi.org/project/manga-ocr/0.1.5/) (supports Japanese only) and the Tesseract-API python wrapper [tesserocr](https://github.com/sirfz/tesserocr) (supports other languages). See demo below to see how it works.
 
 Detect text on locally stored manga images:
@@ -26,7 +26,7 @@ Perform OCR on the current screen by pressing `Alt+Q`:
 
 https://user-images.githubusercontent.com/45705751/161961152-29070fde-03f6-42a7-8569-0ff22ae9b014.mp4
 
-## User Guide  <a name="user_guide"></a>
+## User Guide
 Follow the installation instructions [here](#installation). Load a directory with manga images and select text boxes with Japanese text. If you are not getting good results using the default settings, [use the MangaOcr model](#load_model) to improve text detection.
 
 ### Features
@@ -70,7 +70,7 @@ Listed below are some of the features of Poricom. Smaller features that are not 
   
 </details>
 
-## Installation <a name = "installation"></a>
+## Installation
 Download the latest zip file [here](https://github.com/bluaxees/Poricom/releases/latest/). Decompress the file in the desired directory. Make sure that the `app` folder is in the same folder as the shortcut `Poricom`.
 
 For developers, clone this repo and install requirements: `pip install -r requirements.txt`. Run the app in the command line using `python main.py`. 
@@ -88,7 +88,7 @@ Approximately 250 MB of free space and 200 MB of memory is needed to run the app
 
 For developers, the following Python versions are supported: 3.7, 3.8, 3.9, and 3.10.
 
-## Acknowledgements <a name = "acknowledgements"></a>
+## Acknowledgements
 This project will not be possible without the MangaOcr model by [Maciej Budyś](https://github.com/kha-white) and the Tesseract python wrapper by [sirfz](https://github.com/sirfz) and [the tesserocr contributors](https://github.com/sirfz/tesserocr/graphs/contributors). 
 
 The software is licensed under GPLv3 (see [LICENSE](LICENSE.md)) and uses third party libraries that are distributed under their own terms (see [LICENSE-3RD-PARTY](LICENSE-3RD-PARTY.md)).
