@@ -36,7 +36,7 @@ if __name__ == "__main__":
     widget = MainWindow(parent=None, tracker=tracker)
 
     styles = config["STYLES_DEFAULT"]
-    with open(styles, "r") as fh:
+    with open(styles, "r", encoding="UTF-8") as fh:
         app.setStyleSheet(fh.read())
 
     keybinder.init()
