@@ -42,17 +42,11 @@ def editSelectionConfig(index, cBoxName, config="utils/config.toml"):
 
 
 def editStylesheet(index, replacementText):
-    sheetLight = "./assets/styles.qss"
-    sheetDark = "./assets/styles-dark.qss"
-    with open(sheetLight, "r", encoding="UTF-8") as slFh, open(
-        sheetDark, "r", encoding="UTF-8"
-    ) as sdFh:
-        lineLight = slFh.readlines()
-        linesDark = sdFh.readlines()
-        lineLight[index] = replacementText
-        linesDark[index] = replacementText
-    with open(sheetLight, "w", encoding="UTF-8") as slFh, open(
-        sheetDark, "w", encoding="UTF-8"
-    ) as sdFh:
-        slFh.writelines(lineLight)
-        sdFh.writelines(linesDark)
+    sheets = "./assets/styles.qss", "./assets/styles-dark.qss"
+    for sheet in sheets:
+        with open(sheet, "r+", encoding="UTF-8") as fh:
+            lines = fh.readlines()
+            lines[index] = replacementText
+            fh.seek(0)
+            fh.writelines(lines)
+            fh.truncate()
