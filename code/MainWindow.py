@@ -22,21 +22,36 @@ from time import sleep
 
 import toml
 from manga_ocr import MangaOcr
-from PyQt5.QtCore import (Qt, QAbstractNativeEventFilter, QThreadPool)
-from PyQt5.QtWidgets import (QHBoxLayout, QVBoxLayout, QWidget,
-                             QPushButton, QFileDialog, QInputDialog, QMainWindow, QApplication)
+from PyQt5.QtCore import Qt, QAbstractNativeEventFilter, QThreadPool
+from PyQt5.QtWidgets import (
+    QHBoxLayout,
+    QVBoxLayout,
+    QWidget,
+    QPushButton,
+    QFileDialog,
+    QInputDialog,
+    QMainWindow,
+    QApplication,
+)
 
 from utils.image_io import mangaFileToImageDir
 from utils.config import config, saveOnClose
 from Workers import BaseWorker
-from Ribbon import (Ribbon)
+from Ribbon import Ribbon
 from Docks import DockBase
-from Explorers import (ImageExplorer)
-from Scratchpad import (Scratchpad)
-from Views import (OCRCanvas, FullScreen)
-from Popups import (FontPicker, LanguagePicker, ScaleImagePicker,
-                    ShortcutPicker, PickerPopup, MessagePopup, TextModsPicker)
-from TextHandler import (formatter)
+from Explorers import ImageExplorer
+from Scratchpad import Scratchpad
+from Views import OCRCanvas, FullScreen
+from Popups import (
+    FontPicker,
+    LanguagePicker,
+    ScaleImagePicker,
+    ShortcutPicker,
+    PickerPopup,
+    MessagePopup,
+    TextModsPicker,
+)
+from TextHandler import formatter
 
 
 class WinEventFilter(QAbstractNativeEventFilter):
@@ -50,7 +65,6 @@ class WinEventFilter(QAbstractNativeEventFilter):
 
 
 class MainWindow(QMainWindow):
-
     def __init__(self, parent=None, tracker=None):
         # Not sure why this is using QWidget here.
         super(QWidget, self).__init__(parent)
@@ -108,18 +122,13 @@ class MainWindow(QMainWindow):
         return QMainWindow.closeEvent(self, event)
 
     def poricomNoop(self):
-        MessagePopup(
-            "WIP",
-            "This function is not yet implemented."
-        ).exec()
+        MessagePopup("WIP", "This function is not yet implemented.").exec()
 
-# ------------------------------ File Functions ------------------------------ #
+    # ------------------------------ File Functions ------------------------------ #
 
     def openDir(self):
         filepath = QFileDialog.getExistingDirectory(
-            self,
-            "Open Directory",
-            "."  # , QFileDialog.DontUseNativeDialog
+            self, "Open Directory", "."  # , QFileDialog.DontUseNativeDialog
         )
 
         if filepath:
@@ -129,24 +138,20 @@ class MainWindow(QMainWindow):
 
     def openManga(self):
         filename, _ = QFileDialog.getOpenFileName(
-            self,
-            "Open Manga File",
-            ".",
-            "Manga (*.cbz *.cbr *.zip *.rar *.pdf)"
+            self, "Open Manga File", ".", "Manga (*.cbz *.cbr *.zip *.rar *.pdf)"
         )
 
         if filename:
+
             def setDirectory(filepath):
                 self.tracker.filepath = filepath
                 self.explorer.setDirectory(filepath)
 
-            openMangaButton = self.ribbon.findChild(
-                QPushButton, "openManga")
+            openMangaButton = self.ribbon.findChild(QPushButton, "openManga")
 
             worker = BaseWorker(mangaFileToImageDir, filename)
             worker.signals.result.connect(setDirectory)
-            worker.signals.finished.connect(
-                lambda: openMangaButton.setEnabled(True))
+            worker.signals.finished.connect(lambda: openMangaButton.setEnabled(True))
 
             self.threadpool.start(worker)
             openMangaButton.setEnabled(False)
@@ -162,12 +167,11 @@ class MainWindow(QMainWindow):
         externalWindow.layout().setContentsMargins(0, 0, 0, 0)
         externalWindow.setStyleSheet("border:0px; margin:0px")
 
-        externalWindow.setCentralWidget(
-            FullScreen(externalWindow, self.tracker))
+        externalWindow.setCentralWidget(FullScreen(externalWindow, self.tracker))
         externalWindow.centralWidget().takeScreenshot()
         externalWindow.showFullScreen()
 
-# ------------------------------ View Functions ------------------------------ #
+    # ------------------------------ View Functions ------------------------------ #
 
     def toggleStylesheet(self):
         configPath = "./utils/config.toml"
@@ -179,7 +183,7 @@ class MainWindow(QMainWindow):
             data["STYLES_DEFAULT"] = darkMode
         elif data["STYLES_DEFAULT"] == darkMode:
             data["STYLES_DEFAULT"] = lightMode
-        with open(configPath, 'w', encoding='UTF-8') as fh:
+        with open(configPath, "w", encoding="UTF-8") as fh:
             toml.dump(data, fh)
 
         app = QApplication.instance()
@@ -188,7 +192,7 @@ class MainWindow(QMainWindow):
 
         styles = data["STYLES_DEFAULT"]
         self.config["STYLES_DEFAULT"] = data["STYLES_DEFAULT"]
-        with open(styles, 'r', encoding='UTF-8') as fh:
+        with open(styles, "r", encoding="UTF-8") as fh:
             app.setStyleSheet(fh.read())
 
     def modifyFontSettings(self):
@@ -200,7 +204,7 @@ class MainWindow(QMainWindow):
             if app is None:
                 raise RuntimeError("No Qt Application found.")
 
-            with open(config["STYLES_DEFAULT"], 'r', encoding='UTF-8') as fh:
+            with open(config["STYLES_DEFAULT"], "r", encoding="UTF-8") as fh:
                 app.setStyleSheet(fh.read())
 
     def toggleSplitView(self):
@@ -217,7 +221,7 @@ class MainWindow(QMainWindow):
         confirmation = PickerPopup(ScaleImagePicker(self, self.tracker))
         confirmation.exec()
 
-# ----------------------------- Control Functions ---------------------------- #
+    # ----------------------------- Control Functions ---------------------------- #
 
     def toggleMouseMode(self):
         self.canvas.toggleZoomPanMode()
@@ -226,12 +230,9 @@ class MainWindow(QMainWindow):
         confirmation = PickerPopup(ShortcutPicker(self, self.tracker))
         ret = confirmation.exec()
         if ret:
-            MessagePopup(
-                "Shortcut Remapped",
-                "Close the app to apply changes."
-            ).exec()
+            MessagePopup("Shortcut Remapped", "Close the app to apply changes.").exec()
 
-# ------------------------------ Misc Functions ------------------------------ #
+    # ------------------------------ Misc Functions ------------------------------ #
 
     def loadModel(self):
         loadModelButton = self.ribbon.findChild(QPushButton, "loadModel")
@@ -240,12 +241,12 @@ class MainWindow(QMainWindow):
         if loadModelButton.isChecked():
             confirmation = MessagePopup(
                 "Load the MangaOCR model?",
-                "If you are running this for the first time, this will " +
-                "download the MangaOcr model which is about 400 MB in size. " +
-                "This will improve the accuracy of Japanese text detection " +
-                "in Poricom. If it is already in your cache, it will take a " +
-                "few seconds to load the model.",
-                MessagePopup.Ok | MessagePopup.Cancel
+                "If you are running this for the first time, this will "
+                + "download the MangaOcr model which is about 400 MB in size. "
+                + "This will improve the accuracy of Japanese text detection "
+                + "in Poricom. If it is already in your cache, it will take a "
+                + "few seconds to load the model.",
+                MessagePopup.Ok | MessagePopup.Cancel,
             )
             ret = confirmation.exec()
             if ret == MessagePopup.Ok:
@@ -283,20 +284,19 @@ class MainWindow(QMainWindow):
             if connected:
                 MessagePopup(
                     f"{modelName} model loaded",
-                    f"You are now using the {modelName} model for Japanese text detection."
+                    f"You are now using the {modelName} model for Japanese text detection.",
                 ).exec()
 
             elif not connected:
                 MessagePopup(
                     "Connection Error",
-                    "Please try again or make sure your Internet connection is on."
+                    "Please try again or make sure your Internet connection is on.",
                 ).exec()
                 loadModelButton.setChecked(False)
 
         worker = BaseWorker(loadModelHelper, self.tracker)
         worker.signals.result.connect(modelLoadedConfirmation)
-        worker.signals.finished.connect(lambda:
-                                        loadModelButton.setEnabled(True))
+        worker.signals.finished.connect(lambda: loadModelButton.setEnabled(True))
 
         self.threadpool.start(worker)
         loadModelButton.setEnabled(False)
@@ -315,13 +315,13 @@ class MainWindow(QMainWindow):
         confirmation = PickerPopup(TextModsPicker(self, self.tracker))
         confirmation.exec()
 
-# ----------------------- Button State Initialization ------------------------ #
+    # ----------------------- Button State Initialization ------------------------ #
 
     def initButtonState(self):
         scratchpadButton = self.ribbon.findChild(QPushButton, "toggleScratchpadAutofocus")
         scratchpadButton.setChecked(self.tracker.scratchpadAutofocus)
 
-# --------------------------- Always On Functions ---------------------------- #
+    # --------------------------- Always On Functions ---------------------------- #
 
     def loadPrevImage(self):
         index = self.explorer.indexAbove(self.explorer.currentIndex())
@@ -347,16 +347,17 @@ class MainWindow(QMainWindow):
         rowCount = self.explorer.model.rowCount(self.explorer.rootIndex())
         i, _ = QInputDialog.getInt(
             self,
-            'Jump to',
-            f'Enter page number: (max is {rowCount})',
+            "Jump to",
+            f"Enter page number: (max is {rowCount})",
             value=-1,
             min=1,
             max=rowCount,
-            flags=Qt.CustomizeWindowHint | Qt.WindowTitleHint)
+            flags=Qt.CustomizeWindowHint | Qt.WindowTitleHint,
+        )
         if i == -1:
             return
 
-        index = self.explorer.model.index(i-1, 0, self.explorer.rootIndex())
+        index = self.explorer.model.index(i - 1, 0, self.explorer.rootIndex())
         self.explorer.setCurrentIndex(index)
 
     def zoomIn(self):

@@ -2,9 +2,9 @@
 Simple little scratchpad
 """
 
-from PyQt5.QtCore import (pyqtSlot)
-from PyQt5.QtWidgets import (QTextEdit, QShortcut, QApplication)
-from PyQt5.QtGui import (QContextMenuEvent)
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QTextEdit, QShortcut, QApplication
+from PyQt5.QtGui import QContextMenuEvent
 
 
 class Scratchpad(QTextEdit):

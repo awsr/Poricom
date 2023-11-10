@@ -6,7 +6,7 @@ class DockBase(QDockWidget):
     def __init__(self, parent=None, widget=None, allowFloat=False):
         super().__init__(parent)
         self.setAllowedAreas(Qt.LeftDockWidgetArea)
-        if (allowFloat):
+        if allowFloat:
             self.setFeatures(QDockWidget.DockWidgetFloatable)
         else:
             self.setFeatures(QDockWidget.NoDockWidgetFeatures)

@@ -2,7 +2,8 @@
 Data models for Qt views
 """
 
-from PyQt5.QtCore import (Qt, QAbstractListModel)
+from PyQt5.QtCore import Qt, QAbstractListModel
+
 
 class RuleModel(QAbstractListModel):
     def __init__(self, parent):

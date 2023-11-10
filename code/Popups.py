@@ -17,15 +17,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from PyQt5.QtCore import (Qt)
-from PyQt5.QtWidgets import (QGridLayout, QVBoxLayout, QWidget, QLabel,
-                             QLineEdit, QComboBox, QDialog, QDialogButtonBox,
-                             QMessageBox, QListView, QPushButton, QAbstractItemView)
-from PyQt5.QtGui import (QIcon)
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (
+    QGridLayout,
+    QVBoxLayout,
+    QWidget,
+    QLabel,
+    QLineEdit,
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
+    QMessageBox,
+    QListView,
+    QPushButton,
+    QAbstractItemView,
+)
+from PyQt5.QtGui import QIcon
 
-from utils.config import (editSelectionConfig, editStylesheet)
-from models import (RuleModel)
-from TextHandler import (formatter)
+from utils.config import editSelectionConfig, editStylesheet
+from models import RuleModel
+from TextHandler import formatter
 
 
 class MessagePopup(QMessageBox):
@@ -35,9 +46,10 @@ class MessagePopup(QMessageBox):
 
 class RuleLineEdit(QLineEdit):
     """Workaround QLineEdit class for an unusual bug causing the
-       default button to lose its Default status the first time it
-       gets and then loses focus. When this control gets focus,
-       it will reset the targeted button's status as Default."""
+    default button to lose its Default status the first time it
+    gets and then loses focus. When this control gets focus,
+    it will reset the targeted button's status as Default."""
+
     def __init__(self, parent):
         super().__init__(parent)
         self.default_target = None
@@ -62,10 +74,14 @@ class RulesPicker(QWidget):
 
         self.input1 = RuleLineEdit(self)
         self.input2 = RuleLineEdit(self)
-        self.button_add = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["add"]), "", self)
+        self.button_add = QPushButton(
+            QIcon(self.parent.config["RULES_PICKER_ICONS"]["add"]), "", self
+        )
         self.button_add.setObjectName("rulespicker_btn_add")
         self.button_add.setDefault(True)
-        self.button_del = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["del"]), "", self)
+        self.button_del = QPushButton(
+            QIcon(self.parent.config["RULES_PICKER_ICONS"]["del"]), "", self
+        )
         self.button_del.setObjectName("rulespicker_btn_del")
         self.button_del.setAutoDefault(False)
 
@@ -79,10 +95,14 @@ class RulesPicker(QWidget):
         self.vertical_layout = QVBoxLayout()
         self.vertical_layout.setObjectName("rulesvertical")
 
-        self.button_move_up = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveUp"]), "", self)
+        self.button_move_up = QPushButton(
+            QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveUp"]), "", self
+        )
         self.button_move_up.setAutoDefault(False)
         self.button_move_up.setObjectName("rulespicker_btn_move_up")
-        self.button_move_down = QPushButton(QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveDown"]), "", self)
+        self.button_move_down = QPushButton(
+            QIcon(self.parent.config["RULES_PICKER_ICONS"]["moveDown"]), "", self
+        )
         self.button_move_down.setAutoDefault(False)
         self.button_move_down.setObjectName("rulespicker_btn_move_down")
 
@@ -252,7 +272,7 @@ class LanguagePicker(BasePicker):
             self.tracker.orientation = ""
 
     def applyChanges(self):
-        self.applySelections(['language', 'orientation'])
+        self.applySelections(["language", "orientation"])
         return True
 
 
@@ -289,7 +309,7 @@ class FontPicker(BasePicker):
         self.fontSizeText = replacementText
 
     def applyChanges(self):
-        self.applySelections(['fontStyle', 'fontSize'])
+        self.applySelections(["fontStyle", "fontSize"])
         editStylesheet(41, self.fontStyleText)
         editStylesheet(42, self.fontSizeText)
         return True
@@ -312,7 +332,7 @@ class ScaleImagePicker(BasePicker):
         self.imageScalingIndex = i
 
     def applyChanges(self):
-        self.applySelections(['imageScaling'])
+        self.applySelections(["imageScaling"])
         self.parent.canvas.setViewImageMode(self.imageScalingIndex)
         return True
 
@@ -336,16 +356,12 @@ class ShortcutPicker(BasePicker):
         self.modifierIndex = self.pickTop.currentIndex()
 
     def keyInvalidError(self):
-        MessagePopup(
-            "Invalid Key",
-            "Please select an alphanumeric key."
-        ).exec()
+        MessagePopup("Invalid Key", "Please select an alphanumeric key.").exec()
 
     def changeModifier(self, i):
         self.modifierIndex = i
 
     def setShortcut(self, keyName, modifierText, keyText):
-
         tooltip = f"{self.parent.config['SHORTCUT'][f'{keyName}Tip']}{modifierText}{keyText}."
         self.parent.config["SHORTCUT"][keyName] = f"{modifierText}{keyText}"
         self.parent.config["SHORTCUT"][f"{keyName}Key"] = keyText
@@ -363,20 +379,20 @@ class ShortcutPicker(BasePicker):
             self.keyInvalidError()
             return False
 
-        self.setShortcut('captureExternal', selectedModifier,
-                         self.pickBot.text())
-        self.applySelections(['modifier'])
+        self.setShortcut("captureExternal", selectedModifier, self.pickBot.text())
+        self.applySelections(["modifier"])
         return True
 
 
 class PickerPopup(QDialog):
     def __init__(self, widget):
-        super().__init__(None, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
+        super().__init__(
+            None, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint
+        )
         self.widget = widget
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(widget)
-        self.buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.layout().addWidget(self.buttonBox)
 
         # Stop annoying autoDefault behavior stealing from explicit defaults

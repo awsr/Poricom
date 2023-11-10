@@ -18,36 +18,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import toml
+
 config = toml.load("./utils/config.toml")
 
 
 def saveOnClose(data, config="utils/config.toml"):
-    with open(config, 'w', encoding="UTF-8") as fh:
+    with open(config, "w", encoding="UTF-8") as fh:
         toml.dump(data, fh)
 
 
 def editConfig(index, replacementText, config="utils/config.toml"):
     data = toml.load(config)
     data[index] = replacementText
-    with open(config, 'w', encoding="UTF-8") as fh:
+    with open(config, "w", encoding="UTF-8") as fh:
         toml.dump(data, fh)
 
 
 def editSelectionConfig(index, cBoxName, config="utils/config.toml"):
     data = toml.load(config)
     data["SELECTED_INDEX"][cBoxName] = index
-    with open(config, 'w', encoding="UTF-8") as fh:
+    with open(config, "w", encoding="UTF-8") as fh:
         toml.dump(data, fh)
 
 
 def editStylesheet(index, replacementText):
-    sheetLight = './assets/styles.qss'
-    sheetDark = './assets/styles-dark.qss'
-    with open(sheetLight, 'r', encoding="UTF-8") as slFh, open(sheetDark, 'r', encoding="UTF-8") as sdFh:
+    sheetLight = "./assets/styles.qss"
+    sheetDark = "./assets/styles-dark.qss"
+    with open(sheetLight, "r", encoding="UTF-8") as slFh, open(
+        sheetDark, "r", encoding="UTF-8"
+    ) as sdFh:
         lineLight = slFh.readlines()
         linesDark = sdFh.readlines()
         lineLight[index] = replacementText
         linesDark[index] = replacementText
-    with open(sheetLight, 'w', encoding="UTF-8") as slFh, open(sheetDark, 'w', encoding="UTF-8") as sdFh:
+    with open(sheetLight, "w", encoding="UTF-8") as slFh, open(
+        sheetDark, "w", encoding="UTF-8"
+    ) as sdFh:
         slFh.writelines(lineLight)
         sdFh.writelines(linesDark)

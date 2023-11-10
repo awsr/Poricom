@@ -20,16 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from os.path import exists
 import math
 
-from PyQt5.QtGui import (QIcon)
-from PyQt5.QtCore import (Qt, QSize)
-from PyQt5.QtWidgets import (
-    QGridLayout, QHBoxLayout, QWidget, QTabWidget, QPushButton)
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtWidgets import QGridLayout, QHBoxLayout, QWidget, QTabWidget, QPushButton
 
 from utils.config import config
 
 
 class RibbonTab(QWidget):
-
     def __init__(self, parent=None, funcs=None, tracker=None, tabName=""):
         super().__init__()
         self.parent = parent
@@ -43,25 +41,24 @@ class RibbonTab(QWidget):
         self.initButtons(funcs)
 
     def initButtons(self, funcs):
-
         for funcName, funcConfig in funcs.items():
             self.loadButtonConfig(funcName, funcConfig)
-            self.layout.addWidget(self.buttonList[-1],
-                                  alignment=getattr(Qt, funcConfig["align"]))
+            self.layout.addWidget(self.buttonList[-1], alignment=getattr(Qt, funcConfig["align"]))
         self.layout.addStretch()
         self.layout.addWidget(PageNavigator(self.parent))
 
     def loadButtonConfig(self, buttonName, buttonConfig):
-
-        w = math.floor(self.parent.frameGeometry().height(
-        )*config["TBAR_ISIZE_REL"]*buttonConfig["iconW"])
-        h = math.floor(self.parent.frameGeometry().height(
-        )*config["TBAR_ISIZE_REL"]*buttonConfig["iconH"])
+        w = math.floor(
+            self.parent.frameGeometry().height() * config["TBAR_ISIZE_REL"] * buttonConfig["iconW"]
+        )
+        h = math.floor(
+            self.parent.frameGeometry().height() * config["TBAR_ISIZE_REL"] * buttonConfig["iconH"]
+        )
         m = math.floor(config["TBAR_ISIZE_MARGIN"])
 
         icon = QIcon()
         path = config["TBAR_ICONS"] + buttonConfig["path"]
-        if (exists(path)):
+        if exists(path):
             icon = QIcon(path)
         else:
             icon = QIcon(config["TBAR_ICON_DEFAULT"])
@@ -71,7 +68,7 @@ class RibbonTab(QWidget):
 
         self.buttonList[-1].setIcon(icon)
         self.buttonList[-1].setIconSize(QSize(w, h))
-        self.buttonList[-1].setFixedSize(QSize(w*m, h*m))
+        self.buttonList[-1].setFixedSize(QSize(w * m, h * m))
 
         tooltip = f"<h3 style='margin-bottom: 4px;'>{buttonConfig['helpTitle']}\
             </h3><p style='margin-top: 0;'>{buttonConfig['helpMsg']}</p>"
@@ -79,15 +76,12 @@ class RibbonTab(QWidget):
         self.buttonList[-1].setCheckable(buttonConfig["toggle"])
 
         if hasattr(self.parent, buttonName):
-            self.buttonList[-1].clicked.connect(
-                getattr(self.parent, buttonName))
+            self.buttonList[-1].clicked.connect(getattr(self.parent, buttonName))
         else:
-            self.buttonList[-1].clicked.connect(
-                getattr(self.parent, 'poricomNoop'))
+            self.buttonList[-1].clicked.connect(getattr(self.parent, "poricomNoop"))
 
 
 class PageNavigator(RibbonTab):
-
     def __init__(self, parent=None, tracker=None):
         # This setup seems likely to cause headaches
         super(QWidget, self).__init__()
@@ -113,10 +107,13 @@ class Ribbon(QTabWidget):
         self.parent = parent
         self.tracker = tracker
 
-        h = math.floor(self.parent.frameGeometry().height(
-        ) * config["TBAR_ISIZE_REL"] * config["RBN_HEIGHT"])
+        h = math.floor(
+            self.parent.frameGeometry().height() * config["TBAR_ISIZE_REL"] * config["RBN_HEIGHT"]
+        )
         self.setFixedHeight(h)
 
         for tabName, tools in config["TBAR_FUNCS"].items():
-            self.addTab(RibbonTab(parent=self.parent, funcs=tools,
-                        tracker=self.tracker, tabName=tabName), tabName)
+            self.addTab(
+                RibbonTab(parent=self.parent, funcs=tools, tracker=self.tracker, tabName=tabName),
+                tabName,
+            )

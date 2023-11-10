@@ -20,17 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import sleep
 import math
 
-from PyQt5.QtCore import (Qt, QRect, QSize, QRectF,
-                          QTimer, QThreadPool, pyqtSlot)
-from PyQt5.QtWidgets import (
-    QApplication, QGraphicsView, QGraphicsScene, QLabel, QWidget)
+from PyQt5.QtCore import Qt, QRect, QSize, QRectF, QTimer, QThreadPool, pyqtSlot
+from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QLabel, QWidget
 
 from Workers import BaseWorker
 from utils.image_io import logText, pixboxToText
 
 
 class BaseCanvas(QGraphicsView):
-
     def __init__(self, parent=None, tracker=None):
         super().__init__(parent)
         self.parent = parent
@@ -48,8 +45,11 @@ class BaseCanvas(QGraphicsView):
 
         self.scene = QGraphicsScene()
         self.setScene(self.scene)
-        self.pixmap = self.scene.addPixmap(self.tracker.pixImage.scaledToWidth(
-            self.viewport().geometry().width(), Qt.SmoothTransformation))
+        self.pixmap = self.scene.addPixmap(
+            self.tracker.pixImage.scaledToWidth(
+                self.viewport().geometry().width(), Qt.SmoothTransformation
+            )
+        )
 
         self.setDragMode(QGraphicsView.RubberBandDrag)
 
@@ -65,15 +65,14 @@ class BaseCanvas(QGraphicsView):
         text = self.canvasText.text()
         logText(text, mode=logToFile, path=logPath)
         self.canvasText.hide()
-        if (self.tracker.scratchpadAutofocus):
+        if self.tracker.scratchpadAutofocus:
             QWidget.activateWindow(self.tracker.scratchpad)
             QWidget.setFocus(self.tracker.scratchpad)
         super().mouseReleaseEvent(event)
 
     @pyqtSlot()
     def rubberBandStopped(self):
-
-        if (self.canvasText.isHidden()):
+        if self.canvasText.isHidden():
             self.canvasText.setText("")
             self.canvasText.adjustSize()
             self.canvasText.show()
@@ -85,13 +84,11 @@ class BaseCanvas(QGraphicsView):
         worker.signals.result.connect(self.canvasText.setText)
         worker.signals.finished.connect(self.canvasText.adjustSize)
         self.timer_.timeout.disconnect(self.rubberBandStopped)
-        worker.signals.finished.connect(
-            lambda: self.timer_.timeout.connect(self.rubberBandStopped))
+        worker.signals.finished.connect(lambda: self.timer_.timeout.connect(self.rubberBandStopped))
         QThreadPool.globalInstance().start(worker)
 
 
 class FullScreen(BaseCanvas):
-
     def __init__(self, parent=None, tracker=None):
         super().__init__(parent, tracker)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -100,8 +97,7 @@ class FullScreen(BaseCanvas):
     def takeScreenshot(self):
         screen = QApplication.primaryScreen()
         s = screen.size()
-        self.pixmap.setPixmap(screen.grabWindow(
-            0).scaled(s.width(), s.height()))
+        self.pixmap.setPixmap(screen.grabWindow(0).scaled(s.width(), s.height()))
         self.scene.setSceneRect(QRectF(self.pixmap.pixmap().rect()))
 
     def mouseReleaseEvent(self, event):
@@ -110,7 +106,6 @@ class FullScreen(BaseCanvas):
 
 
 class OCRCanvas(BaseCanvas):
-
     def __init__(self, parent=None, tracker=None):
         super().__init__(parent, tracker)
 
@@ -130,23 +125,25 @@ class OCRCanvas(BaseCanvas):
 
         self.scene = QGraphicsScene()
         self.setScene(self.scene)
-        self.pixmap = self.scene.addPixmap(self.tracker.pixImage.scaledToWidth(
-            self.viewport().geometry().width(), Qt.SmoothTransformation))
+        self.pixmap = self.scene.addPixmap(
+            self.tracker.pixImage.scaledToWidth(
+                self.viewport().geometry().width(), Qt.SmoothTransformation
+            )
+        )
 
     def viewImage(self, factor=1):
         # self.verticalScrollBar().setSliderPosition(0)
         factor = self.currentScale
-        w = math.floor(factor*self.viewport().geometry().width())
-        h = math.floor(factor*self.viewport().geometry().height())
+        w = math.floor(factor * self.viewport().geometry().width())
+        h = math.floor(factor * self.viewport().geometry().height())
         if self._viewImageMode == 0:
-            self.pixmap.setPixmap(
-                self.tracker.pixImage.scaledToWidth(w, Qt.SmoothTransformation))
+            self.pixmap.setPixmap(self.tracker.pixImage.scaledToWidth(w, Qt.SmoothTransformation))
         elif self._viewImageMode == 1:
-            self.pixmap.setPixmap(
-                self.tracker.pixImage.scaledToHeight(h, Qt.SmoothTransformation))
+            self.pixmap.setPixmap(self.tracker.pixImage.scaledToHeight(h, Qt.SmoothTransformation))
         elif self._viewImageMode == 2:
-            self.pixmap.setPixmap(self.tracker.pixImage.scaled(
-                w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            self.pixmap.setPixmap(
+                self.tracker.pixImage.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            )
         elif self._viewImageMode == 3:
             self.pixmap.setPixmap(self.tracker.pixImage)
         self.scene.setSceneRect(QRectF(self.pixmap.pixmap().rect()))
@@ -154,7 +151,7 @@ class OCRCanvas(BaseCanvas):
     def setViewImageMode(self, mode):
         self._viewImageMode = mode
         self.parent.config["VIEW_IMAGE_MODE"] = mode
-        self.parent.config["SELECTED_INDEX"]['imageScaling'] = mode
+        self.parent.config["SELECTED_INDEX"]["imageScaling"] = mode
         self.viewImage()
 
     def splitViewMode(self):
@@ -170,11 +167,11 @@ class OCRCanvas(BaseCanvas):
             factor = 1.4
 
         if isZoomIn and self.currentScale < 15:
-            #self.scale(factor, factor)
+            # self.scale(factor, factor)
             self.currentScale *= factor
             self.viewImage(self.currentScale)
         elif not isZoomIn and self.currentScale > 0.35:
-            #self.scale(1/factor, 1/factor)
+            # self.scale(1/factor, 1/factor)
             self.currentScale /= factor
             self.viewImage(self.currentScale)
 
@@ -204,7 +201,6 @@ class OCRCanvas(BaseCanvas):
             return
 
         if not zoomMode:
-
             mouseScrollLimit = 3
             trackpadScrollLimit = 36
             wheelDelta = 120
@@ -212,22 +208,23 @@ class OCRCanvas(BaseCanvas):
             def suppressScroll():
                 self._scrollSuppressed = True
                 worker = BaseWorker(sleep, 0.3)
-                worker.signals.finished.connect(
-                    lambda: setattr(self, "_scrollSuppressed", False))
+                worker.signals.finished.connect(lambda: setattr(self, "_scrollSuppressed", False))
                 QThreadPool.globalInstance().start(worker)
 
-            if (event.angleDelta().y() < 0 and
-                    self.verticalScrollBar().value() == self.verticalScrollBar().maximum()):
-                if (event.angleDelta().y() > -wheelDelta):
-                    if (self._trackPadAtMax == trackpadScrollLimit):
+            if (
+                event.angleDelta().y() < 0
+                and self.verticalScrollBar().value() == self.verticalScrollBar().maximum()
+            ):
+                if event.angleDelta().y() > -wheelDelta:
+                    if self._trackPadAtMax == trackpadScrollLimit:
                         self.parent.loadNextImage()
                         self._trackPadAtMax = 0
                         suppressScroll()
                         return
                     else:
                         self._trackPadAtMax += 1
-                elif (event.angleDelta().y() <= -wheelDelta):
-                    if (self._scrollAtMax == mouseScrollLimit):
+                elif event.angleDelta().y() <= -wheelDelta:
+                    if self._scrollAtMax == mouseScrollLimit:
                         self.parent.loadNextImage()
                         self._scrollAtMax = 0
                         suppressScroll()
@@ -235,18 +232,20 @@ class OCRCanvas(BaseCanvas):
                     else:
                         self._scrollAtMax += 1
 
-            if (event.angleDelta().y() > 0 and
-                    self.verticalScrollBar().value() == self.verticalScrollBar().minimum()):
-                if (event.angleDelta().y() < wheelDelta):
-                    if (self._trackPadAtMin == trackpadScrollLimit):
+            if (
+                event.angleDelta().y() > 0
+                and self.verticalScrollBar().value() == self.verticalScrollBar().minimum()
+            ):
+                if event.angleDelta().y() < wheelDelta:
+                    if self._trackPadAtMin == trackpadScrollLimit:
                         self.parent.loadPrevImage()
                         self._trackPadAtMin = 0
                         suppressScroll()
                         return
                     else:
                         self._trackPadAtMin += 1
-                elif (event.angleDelta().y() >= wheelDelta):
-                    if (self._scrollAtMin == mouseScrollLimit):
+                elif event.angleDelta().y() >= wheelDelta:
+                    if self._scrollAtMin == mouseScrollLimit:
                         self.parent.loadPrevImage()
                         self._scrollAtMin = 0
                         suppressScroll()

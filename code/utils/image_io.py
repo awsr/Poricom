@@ -24,6 +24,7 @@ import zipfile
 
 from PyQt5.QtCore import QBuffer
 from PyQt5.QtGui import QGuiApplication
+
 # On Windows, a pre-compiled version of tesserocr is loaded
 # pylint: disable-next=no-name-in-module
 from tesserocr import PyTessBaseAPI
@@ -32,7 +33,7 @@ import rarfile
 import pdf2image
 
 from utils.config import config
-from TextHandler import (formatter)
+from TextHandler import formatter
 
 
 def mangaFileToImageDir(filepath):
@@ -40,7 +41,7 @@ def mangaFileToImageDir(filepath):
     cachePath = f"./poricom_cache/{basename(extractPath)}"
 
     if extension in [".cbz", ".zip"]:
-        with zipfile.ZipFile(filepath, 'r') as zipRef:
+        with zipfile.ZipFile(filepath, "r") as zipRef:
             zipRef.extractall(cachePath)
 
     rarfile.UNRAR_TOOL = "utils/unrar.exe"
@@ -52,19 +53,16 @@ def mangaFileToImageDir(filepath):
         try:
             images = pdf2image.convert_from_path(filepath)
         except pdf2image.exceptions.PDFInfoNotInstalledError:
-            images = pdf2image.convert_from_path(
-                filepath, poppler_path="poppler/Library/bin")
+            images = pdf2image.convert_from_path(filepath, poppler_path="poppler/Library/bin")
         for i, image in enumerate(images):
             filename = basename(extractPath)
             Path(cachePath).mkdir(parents=True, exist_ok=True)
-            image.save(
-                f"{cachePath}/{i+1}_{filename}.png", 'PNG')
+            image.save(f"{cachePath}/{i+1}_{filename}.png", "PNG")
 
     return cachePath
 
 
 def pixboxToText(pixmap, lang="jpn_vert", model=None):
-
     buffer = QBuffer()
     buffer.open(QBuffer.ReadWrite)
     pixmap.save(buffer, "PNG")
@@ -95,5 +93,5 @@ def logText(text, mode=False, path="."):
     clipboard.setText(text)
 
     if mode:
-        with open(path, 'a', encoding="utf-8") as fh:
+        with open(path, "a", encoding="utf-8") as fh:
             fh.write(text + "\n")

@@ -26,7 +26,6 @@ from utils.config import config
 
 
 class Tracker:
-
     def __init__(self, filename=config["HOME_IMAGE"], filenext=config["ABOUT_IMAGE"]):
         if not config["SPLIT_VIEW_MODE"]:
             self._pixImage = PImage(filename)
@@ -48,17 +47,16 @@ class Tracker:
 
         self._scratchpad = None
         self._scratchpadAutofocus = False
-        if config ["SCRATCHPAD_AUTOFOCUS_MODE"]:
+        if config["SCRATCHPAD_AUTOFOCUS_MODE"]:
             self._scratchpadAutofocus = True
 
         self._text_rules = []
         for rule in config["TEXT_MODIFICATIONS"]:
             self._text_rules.append([rule[0], rule[1]])
 
-
     def twoFileToImage(self, fileLeft, fileRight):
         imageLeft, imageRight = PImage(fileLeft), PImage(fileRight)
-        if not (imageLeft.isValid()):
+        if not imageLeft.isValid():
             return
 
         w = imageLeft.width() + imageRight.width()
@@ -68,10 +66,10 @@ class Tracker:
             h = imageLeft.height()
         splitImage = QPixmap(w, h)
         painter = QPainter(splitImage)
-        painter.drawPixmap(0, 0, imageLeft.width(), imageLeft.height(),
-                           imageLeft)
-        painter.drawPixmap(imageLeft.width(), 0, imageRight.width(),
-                           imageRight.height(), imageRight)
+        painter.drawPixmap(0, 0, imageLeft.width(), imageLeft.height(), imageLeft)
+        painter.drawPixmap(
+            imageLeft.width(), 0, imageRight.width(), imageRight.height(), imageRight
+        )
         painter.end()
 
         return splitImage
@@ -82,11 +80,11 @@ class Tracker:
 
     @pixImage.setter
     def pixImage(self, image):
-        if (type(image) is str and PImage(image).isValid()):
+        if type(image) is str and PImage(image).isValid():
             self._pixImage = PImage(image)
             self._pixImage.filename = abspath(image)
             self._filepath = abspath(dirname(image))
-        if (type(image) is tuple):
+        if type(image) is tuple:
             fileLeft, fileRight = image
             if not fileRight:
                 if fileLeft:
@@ -115,10 +113,13 @@ class Tracker:
     @filepath.setter
     def filepath(self, filepath):
         self._filepath = filepath
-        filelist = filter(lambda f: isfile(join(self.filepath,
-                                                f)), listdir(self.filepath))
-        self._imageList = list(map(lambda p: normpath(join(self.filepath, p)), filter(
-            (lambda f: ('*'+splitext(f)[1]) in config["IMAGE_EXTENSIONS"]), filelist)))
+        filelist = filter(lambda f: isfile(join(self.filepath, f)), listdir(self.filepath))
+        self._imageList = list(
+            map(
+                lambda p: normpath(join(self.filepath, p)),
+                filter((lambda f: ("*" + splitext(f)[1]) in config["IMAGE_EXTENSIONS"]), filelist),
+            )
+        )
 
     @property
     def language(self):
@@ -184,7 +185,6 @@ class Tracker:
 
 
 class PImage(QPixmap):
-
     def __init__(self, *args):
         super().__init__(args[0])
 

@@ -2,7 +2,8 @@
 Modify clipboard text for matched patterns
 """
 
-class TextFormatter():
+
+class TextFormatter:
     def __init__(self):
         self._rules = None
 
@@ -14,5 +15,6 @@ class TextFormatter():
             text = text.replace(rule[0], rule[1])
 
         return text
+
 
 formatter = TextFormatter()
