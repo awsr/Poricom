@@ -291,10 +291,8 @@ class FontPicker(BasePicker):
         self.pickBot.setCurrentIndex(config["SELECTED_INDEX"]["fontSize"])
         self.nameBot.setText("Font Size: ")
 
-        self.fontStyleText = "  font-family: 'Poppins';\n"
-        self.fontSizeText = "  font-size: 16pt;\n"
-        self.fontStyleIndex = self.pickTop.currentIndex()
-        self.fontSizeIndex = self.pickBot.currentIndex()
+        self.changeFontStyle(self.pickTop.currentIndex())
+        self.changeFontSize(self.pickBot.currentIndex())
 
     def changeFontStyle(self, i):
         self.fontStyleIndex = i
