@@ -20,12 +20,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from io import BytesIO
 from os.path import splitext, basename
 from pathlib import Path
+import zipfile
 
 from PyQt5.QtCore import QBuffer
 from PyQt5.QtGui import QGuiApplication
+# On Windows, a pre-compiled version of tesserocr is loaded
+# pylint: disable-next=no-name-in-module
 from tesserocr import PyTessBaseAPI
 from PIL import Image
-import zipfile
 import rarfile
 import pdf2image
 
