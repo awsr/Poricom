@@ -9,7 +9,7 @@ class TextFormatter():
     def set_rules(self, rules: list):
         self._rules = rules
 
-    def process(self, text):
+    def process(self, text: str) -> str:
         for rule in self._rules:
             text = text.replace(rule[0], rule[1])
 
