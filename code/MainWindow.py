@@ -247,7 +247,7 @@ class MainWindow(QMainWindow):
                 MessagePopup.Ok | MessagePopup.Cancel
             )
             ret = confirmation.exec()
-            if (ret == MessagePopup.Ok):
+            if ret == MessagePopup.Ok:
                 pass
             else:
                 loadModelButton.setChecked(False)
@@ -328,7 +328,7 @@ class MainWindow(QMainWindow):
             tempIndex = self.explorer.indexAbove(index)
             if tempIndex.isValid():
                 index = tempIndex
-        if (not index.isValid()):
+        if not index.isValid():
             return
         self.explorer.setCurrentIndex(index)
 
@@ -338,7 +338,7 @@ class MainWindow(QMainWindow):
             tempIndex = self.explorer.indexBelow(index)
             if tempIndex.isValid():
                 index = tempIndex
-        if (not index.isValid()):
+        if not index.isValid():
             return
         self.explorer.setCurrentIndex(index)
 
@@ -352,7 +352,7 @@ class MainWindow(QMainWindow):
             min=1,
             max=rowCount,
             flags=Qt.CustomizeWindowHint | Qt.WindowTitleHint)
-        if (i == -1):
+        if i == -1:
             return
 
         index = self.explorer.model.index(i-1, 0, self.explorer.rootIndex())
