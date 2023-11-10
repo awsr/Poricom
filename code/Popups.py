@@ -25,6 +25,7 @@ from PyQt5.QtGui import (QIcon)
 
 from utils.config import (editSelectionConfig, editStylesheet)
 from models import (RuleModel)
+from TextHandler import (formatter)
 
 
 class MessagePopup(QMessageBox):
@@ -162,6 +163,7 @@ class RulesPicker(QWidget):
     def save_rules(self):
         """Save rules back out to config"""
         self.tracker.text_rules = self.model.rules
+        formatter.set_rules(self.model.rules)
 
 
 class TextModsPicker(RulesPicker):
