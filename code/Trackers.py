@@ -186,7 +186,7 @@ class Tracker:
 class PImage(QPixmap):
 
     def __init__(self, *args):
-        super(QPixmap, self).__init__(args[0])
+        super().__init__(args[0])
 
         # Current directory + filename
         if type(args[0]) == str:

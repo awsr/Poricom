@@ -31,7 +31,7 @@ from utils.config import config
 class RibbonTab(QWidget):
 
     def __init__(self, parent=None, funcs=None, tracker=None, tabName=""):
-        super(QWidget, self).__init__()
+        super().__init__()
         self.parent = parent
         self.tracker = tracker
         self.tabName = tabName
@@ -89,6 +89,7 @@ class RibbonTab(QWidget):
 class PageNavigator(RibbonTab):
 
     def __init__(self, parent=None, tracker=None):
+        # This setup seems likely to cause headaches
         super(QWidget, self).__init__()
         self.parent = parent
         self.tracker = tracker
@@ -108,7 +109,7 @@ class PageNavigator(RibbonTab):
 
 class Ribbon(QTabWidget):
     def __init__(self, parent=None, tracker=None):
-        super(QTabWidget, self).__init__(parent)
+        super().__init__(parent)
         self.parent = parent
         self.tracker = tracker
 

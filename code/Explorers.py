@@ -27,7 +27,7 @@ class ImageExplorer(QTreeView):
     layoutCheck = False
 
     def __init__(self, parent=None, tracker=None):
-        super(QTreeView, self).__init__()
+        super().__init__()
         self.parent = parent
         self.tracker = tracker
 

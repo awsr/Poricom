@@ -9,7 +9,7 @@ from PyQt5.QtGui import (QContextMenuEvent)
 
 class Scratchpad(QTextEdit):
     def __init__(self, parent=None, tracker=None):
-        super(QTextEdit, self).__init__()
+        super().__init__()
         self.parent = parent
         self.tracker = tracker
         self.setAcceptRichText(False)

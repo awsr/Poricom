@@ -30,8 +30,7 @@ from TextHandler import (formatter)
 
 class MessagePopup(QMessageBox):
     def __init__(self, title, message, flags=QMessageBox.Ok):
-        super(QMessageBox, self).__init__(
-            QMessageBox.NoIcon, title, message, flags)
+        super().__init__(QMessageBox.NoIcon, title, message, flags)
 
 
 class RuleLineEdit(QLineEdit):
@@ -51,7 +50,7 @@ class RuleLineEdit(QLineEdit):
 
 class RulesPicker(QWidget):
     def __init__(self, parent, tracker):
-        super(QWidget, self).__init__()
+        super().__init__()
         self.setObjectName("rulespicker")
         self.parent = parent
         self.tracker = tracker
@@ -181,7 +180,7 @@ class TextModsPicker(RulesPicker):
 
 class BasePicker(QWidget):
     def __init__(self, parent, tracker, optionLists=None):
-        super(QWidget, self).__init__()
+        super().__init__()
         self.parent = parent
         self.tracker = tracker
         if optionLists is None:
@@ -372,8 +371,7 @@ class ShortcutPicker(BasePicker):
 
 class PickerPopup(QDialog):
     def __init__(self, widget):
-        super(QDialog, self).__init__(None,
-                                      Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
+        super().__init__(None, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         self.widget = widget
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(widget)

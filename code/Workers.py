@@ -22,7 +22,7 @@ from PyQt5.QtCore import (QRunnable, QObject, pyqtSignal, pyqtSlot)
 
 class BaseWorker(QRunnable):
     def __init__(self, fn, *args, **kwargs):
-        super(BaseWorker, self).__init__()
+        super().__init__()
         self.fn = fn
         self.args = args
         self.kwargs = kwargs

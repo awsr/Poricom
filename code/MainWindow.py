@@ -52,6 +52,7 @@ class WinEventFilter(QAbstractNativeEventFilter):
 class MainWindow(QMainWindow):
 
     def __init__(self, parent=None, tracker=None):
+        # Not sure why this is using QWidget here.
         super(QWidget, self).__init__(parent)
         self.tracker = tracker
         self.config = config

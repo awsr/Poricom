@@ -32,7 +32,7 @@ from utils.image_io import logText, pixboxToText
 class BaseCanvas(QGraphicsView):
 
     def __init__(self, parent=None, tracker=None):
-        super(QGraphicsView, self).__init__(parent)
+        super().__init__(parent)
         self.parent = parent
         self.tracker = tracker
 
