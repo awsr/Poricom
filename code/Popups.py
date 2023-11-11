@@ -31,6 +31,7 @@ from PyQt5.QtWidgets import (
     QListView,
     QPushButton,
     QAbstractItemView,
+    QStyledItemDelegate,
 )
 from PyQt5.QtGui import QIcon
 
@@ -212,10 +213,13 @@ class BasePicker(QWidget):
         _comboBoxList = []
         _labelList = []
 
-        for i, option in enumerate(optionLists):
-            _comboBoxList.append(QComboBox())
-            _comboBoxList[i].addItems(option)
-            self.layout.addWidget(_comboBoxList[i], i, 1)
+        for i, optionList in enumerate(optionLists):
+            combobox = QComboBox(self)
+            # Allow more styling of dropdown items
+            combobox.setItemDelegate(QStyledItemDelegate(self))
+            combobox.addItems(optionList)
+            _comboBoxList.append(combobox)
+            self.layout.addWidget(combobox, i, 1)
             _labelList.append(QLabel(""))
             self.layout.addWidget(_labelList[i], i, 0)
 

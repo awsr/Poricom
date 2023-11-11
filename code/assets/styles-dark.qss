@@ -155,6 +155,10 @@ QComboBox::down-arrow:on {
   margin-right: 0.4em;
 }
 
+QComboBox QAbstractItemView::item {
+  padding: 3px;
+}
+
 /* Input */
 
 QAbstractSpinBox {
